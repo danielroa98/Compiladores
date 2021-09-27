@@ -43,12 +43,9 @@ def crearF(palabra):
     currentWord = palabra
     # Seperated word into syllables and inserted them into a list
     seperatedSyl = pylabeador.syllabify(currentWord)
-    # print(seperatedSyl)
     for i in seperatedSyl:
         translatedWord.append(meterF(i))
-
     translation.append("".join(translatedWord))
-    # print(translation)
 
 def main(oracion):
     original = oracion.lower().split()
