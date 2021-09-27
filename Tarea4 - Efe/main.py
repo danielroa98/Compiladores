@@ -52,7 +52,6 @@ def main(oracion):
     for palabra in original:
         palabra = crearF(palabra)
         translatedWord.clear()
-    # print(original)
 
 if __name__ == '__main__':
     print('Escriba la oración que desea traducir a "F":')
