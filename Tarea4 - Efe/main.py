@@ -24,11 +24,9 @@ finalTranslation = ''
 currentWord = ''
 seperatedSyl = []
 translatedWord = []
-temp = []
 
 def meterF(silaba):
     silaba = silaba[::-1]
-
     for index, letter in enumerate(silaba):
         if letter in vowels:
             posF = vowels.index(letter)
@@ -48,20 +46,16 @@ def crearF(palabra):
     print(seperatedSyl)
     for i in seperatedSyl:
         translatedWord.append(meterF(i))
-        
+
     translation.append("".join(translatedWord))
     print(translation)
-    # return translation
 
 def main(oracion):
     original = oracion.lower().split()
     for palabra in original:
-        # print(i)
         palabra = crearF(palabra)
         translatedWord.clear()
     print(original)
-        
-
 
 if __name__ == '__main__':
     print('Escriba la oración que desea traducir a "F":')
