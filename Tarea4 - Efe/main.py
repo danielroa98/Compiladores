@@ -43,23 +43,23 @@ def crearF(palabra):
     currentWord = palabra
     # Seperated word into syllables and inserted them into a list
     seperatedSyl = pylabeador.syllabify(currentWord)
-    print(seperatedSyl)
+    # print(seperatedSyl)
     for i in seperatedSyl:
         translatedWord.append(meterF(i))
 
     translation.append("".join(translatedWord))
-    print(translation)
+    # print(translation)
 
 def main(oracion):
     original = oracion.lower().split()
     for palabra in original:
         palabra = crearF(palabra)
         translatedWord.clear()
-    print(original)
+    # print(original)
 
 if __name__ == '__main__':
     print('Escriba la oración que desea traducir a "F":')
     oracion = input()
     main(oracion)
-    print('La oración original es:', oracion)
-    print('La oración traducida es:',createNewSentence(translation))
+    print('\nLa oración original es:\n', oracion)
+    print('\nLa oración traducida es:\n',createNewSentence(translation),'\n')
