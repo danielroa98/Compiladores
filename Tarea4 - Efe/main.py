@@ -7,6 +7,7 @@
     Sebastián Vives     -   A01025211
 """
 # Librería encargada de separar las palabras en sílabas
+from typing import final
 import pylabeador
 
 # Declaración de las vocales para poder compararlas en las palabras
@@ -18,10 +19,22 @@ original = []
 
 # List which will contain the converted sentence
 translation = []
+finalTranslation = ''
 
+# Currently analyzed word
+currentWord = ''
+seperatedSyl = []
+
+def createNewSentence(traduccion):
+    finalTranslation = " ".join(translation)
+    return finalTranslation
 
 def crearF(palabra):
-    print(pylabeador.syllabify(palabra))
+    currentWord = palabra
+    seperatedSyl = pylabeador.syllabify(currentWord)
+    print(seperatedSyl)
+    print("".join(seperatedSyl))
+    translation.append("".join(seperatedSyl))
 
 
 def main(oracion):
@@ -35,3 +48,5 @@ if __name__ == '__main__':
     print('Escriba la oración que desea traducir a "F":')
     oracion = input()
     main(oracion)
+    print(createNewSentence(translation))
+    
