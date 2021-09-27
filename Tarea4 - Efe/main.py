@@ -7,7 +7,6 @@
     Sebastián Vives     -   A01025211
 """
 # Librería encargada de separar las palabras en sílabas
-from typing import final
 import pylabeador
 
 # Declaración de las vocales para poder compararlas en las palabras
@@ -24,6 +23,19 @@ finalTranslation = ''
 # Currently analyzed word
 currentWord = ''
 seperatedSyl = []
+translatedWord = []
+temp = []
+
+def meterF(silaba):
+    silaba = silaba[::-1]
+
+    for index, letter in enumerate(silaba):
+        if letter in vowels:
+            posF = vowels.index(letter)
+            silaba = silaba[::-1]
+            tindex = len(silaba) - index
+            trans = silaba[:tindex] + fVowels[posF] + silaba[tindex:]
+            return trans
 
 def createNewSentence(traduccion):
     finalTranslation = " ".join(translation)
@@ -31,22 +43,29 @@ def createNewSentence(traduccion):
 
 def crearF(palabra):
     currentWord = palabra
+    # Seperated word into syllables and inserted them into a list
     seperatedSyl = pylabeador.syllabify(currentWord)
     print(seperatedSyl)
-    print("".join(seperatedSyl))
-    translation.append("".join(seperatedSyl))
-
+    for i in seperatedSyl:
+        translatedWord.append(meterF(i))
+        
+    translation.append("".join(translatedWord))
+    print(translation)
+    # return translation
 
 def main(oracion):
-    original = oracion.split()
-    for i in original:
+    original = oracion.lower().split()
+    for palabra in original:
         # print(i)
-        crearF(i)
+        palabra = crearF(palabra)
+        translatedWord.clear()
+    print(original)
+        
 
 
 if __name__ == '__main__':
     print('Escriba la oración que desea traducir a "F":')
     oracion = input()
     main(oracion)
-    print(createNewSentence(translation))
-    
+    print('La oración original es:', oracion)
+    print('La oración traducida es:',createNewSentence(translation))
