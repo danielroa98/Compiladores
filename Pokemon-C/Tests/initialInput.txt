@@ -1,8 +1,6 @@
-// This is a dummy file
-charmander ;
-squirtle ;
-pikachu ;
-
-main method () {
-    // This is a test
-}
+battle_start;
+    squirtle x = -2.981;
+    x = 10.1 - 2.98;
+    bulbasaur y = red;
+    pokebelt arr = [];
+battle_end;

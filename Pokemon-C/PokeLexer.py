@@ -1,13 +1,13 @@
 
 from sly import Lexer
 
+
 class CalcLexer(Lexer):
     # Set of token names.   This is always required
-    tokens = { FLOAT, INTEGER, ID, BOOLEAN, ARR, WHILE, IF, ELSE, PRINT,
-               PLUS, MINUS, TIMES, DIVIDE, ASSIGN,
-               EQ, LT, LE, GT, GE, NE, FOR,
-               START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT }
-
+    tokens = {FLOAT, INTEGER, ID, BOOLEAN, ARR, WHILE, IF, ELSE, PRINT,
+              PLUS, MINUS, TIMES, DIVIDE, ASSIGN,
+              EQ, LT, LE, GT, GE, NE, FOR,
+              START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT}
 
     literals = {'{', '}', '[', ']', ',', ';'}
 
@@ -20,18 +20,17 @@ class CalcLexer(Lexer):
         return t
 
     # Regular expression rules for tokens
-    PLUS    = r'\+'
-    MINUS   = r'-'
-    TIMES   = r'\*'
-    DIVIDE  = r'/'
-    EQ      = r'=='
-    ASSIGN  = r'='
-    LE      = r'<='
-    LT      = r'<'
-    GE      = r'>='
-    GT      = r'>'
-    NE      = r'!='
-
+    PLUS = r'\+'
+    MINUS = r'-'
+    TIMES = r'\*'
+    DIVIDE = r'/'
+    EQ = r'=='
+    ASSIGN = r'='
+    LE = r'<='
+    LT = r'<'
+    GE = r'>='
+    GT = r'>'
+    NE = r'!='
 
     @_(r"[-+]?\d+")
     def INTEGER(self, t):
@@ -66,15 +65,17 @@ class CalcLexer(Lexer):
         print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
         self.index += 1
 
-if __name__ == '__main__':
-    data = '''
+
+def lexerStart(fileContents):
+    """ data = '''
             battle_start;
             squirtle x = -2.981;
             x = 10.1 - 2.98;
             bulbasaur y = red;
             pokebelt arr = [];
             battle_end;
-            '''
+            ''' """
+    data = fileContents
     lexer = CalcLexer()
     for tok in lexer.tokenize(data):
         print(tok)
