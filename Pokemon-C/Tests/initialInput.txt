@@ -1,0 +1,8 @@
+// This is a dummy file
+charmander ;
+squirtle ;
+pikachu ;
+
+main method () {
+    // This is a test
+}
