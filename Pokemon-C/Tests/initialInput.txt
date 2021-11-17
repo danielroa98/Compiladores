@@ -1,6 +1,9 @@
 battle_start;
+    pikachu y = 10;
+    pikachu f
     squirtle x = -2.981;
     x = 10.1 - 2.98;
     bulbasaur y = red;
-    pokebelt arr = [];
+    pokebelt arr = [5];
+    pikachu x=2;
 battle_end;

@@ -1,5 +1,11 @@
-
 from sly import Lexer
+import sys
+
+
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
 
 
 class CalcLexer(Lexer):
@@ -62,20 +68,13 @@ class CalcLexer(Lexer):
         self.lineno += t.value.count('\n')
 
     def error(self, t):
-        print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
+        print('Error Léxico: En la línea %d: Con el caracter %r' %
+              (self.lineno, t.value[0]))
+        sys.exit(2)
         self.index += 1
 
 
 def lexerStart(fileContents):
-    """ data = '''
-            battle_start;
-            squirtle x = -2.981;
-            x = 10.1 - 2.98;
-            bulbasaur y = red;
-            pokebelt arr = [];
-            battle_end;
-            ''' """
     data = fileContents
     lexer = CalcLexer()
-    for tok in lexer.tokenize(data):
-        print(tok)
+    return lexer.tokenize(data)

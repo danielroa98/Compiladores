@@ -1,6 +1,7 @@
 import getopt
 import sys
 import PokeLexer
+import PokeSemantics
 
 if __name__ == '__main__':
     inputFile = ''
@@ -13,16 +14,20 @@ if __name__ == '__main__':
             # print(arg, value)
             if arg in ('-h', '--help'):
                 print(
-                    'In order to use Pokemon-C, run the following command.\npython3 PokeMain.py -i <path/to/inputFile>')
+                    'Para comenzar a usar Pokemon-C, corra el siguiente comando.\npython3 PokeMain.py -i <path/al/archivo>')
                 sys.exit(2)
             elif arg in ('-i', '--ifile'):
-                print('Using file located in', value, 'as the current input.')
+                # print('Using file located in', value, 'as the current input.')
                 inputFile = open(value, "r")
                 fileData = inputFile.read()
+                inputFile.close()
 
     except getopt.GetoptError:
-        print('Run main.py -i <inputfile>')
+        print('Corra main.py -i <inputfile>')
         sys.exit(2)
 
-    # print(fileData)
-    PokeLexer.lexerStart(fileData)
+    # Obtain tokens
+    tokens = PokeLexer.lexerStart(fileData)
+    for tok in tokens:
+        tok = str(tok)
+        PokeSemantics.init(tok)
