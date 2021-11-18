@@ -1,5 +1,7 @@
 battle_start;
-pikachu y = 10;
-squirtle x = 98.81;
-pikachu z = y + y + 10 - 40;
+pikachu x = 100;
+pikachu y = 10 + x;
+x = 1000;
+y = x + 1;
+x = z + 10;
 battle_end;

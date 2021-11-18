@@ -11,7 +11,7 @@ class Person:
 class CalcLexer(Lexer):
     # Set of token names.   This is always required
     tokens = {FLOAT, INTEGER, ID, BOOLEAN, ARR, WHILE, IF, ELSE, PRINT,
-              PLUS, MINUS, TIMES, DIVIDE, ASSIGN,
+              PLUS, MINUS, TIMES, DIVIDE, ASSIGN, MOD,
               EQ, LT, LE, GT, GE, NE, FOR,
               START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT}
 
@@ -30,6 +30,7 @@ class CalcLexer(Lexer):
     MINUS = r'-'
     TIMES = r'\*'
     DIVIDE = r'/'
+    MOD = r'%'
     EQ = r'=='
     ASSIGN = r'='
     LE = r'<='

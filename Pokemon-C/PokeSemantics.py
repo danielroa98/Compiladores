@@ -21,6 +21,7 @@ state = 0
 current_variable_ID = ''
 current_variable_value = ''
 current_operator = ''
+modify_existing_varaible_flag = False
 
 
 
@@ -33,8 +34,10 @@ def resetFlags():
     global state
     global current_variable_ID
     global current_variable_value
+    global modify_existing_varaible_flag
 
     assign_variable_flag = False
+    modify_existing_varaible_flag = False
     type_flag = ''
     state = 0
     current_variable_ID = ''
@@ -89,6 +92,8 @@ def arithmetic(val1, val2, type):
         return val1*val2
     elif type == 'DIVIDE':
         return val1/val2
+    elif type == 'MOD':
+        return val1%val2
 
 def assign_variable(token):
     global type_flag
@@ -114,6 +119,7 @@ def assign_variable(token):
             state += 1
         else:
             print('Syntax error')
+            sys.exit(2)
 
     # Esperar ID o un valor
     elif state == 2:
@@ -147,7 +153,7 @@ def assign_variable(token):
 
     elif state == 3:
         # Si el usuario quiere hacer una operacion durante asignacion
-        if token.type == 'PLUS' or token.type == 'MINUS' or token.type == 'TIMES' or token.type == 'DIVIDE':
+        if token.type == 'PLUS' or token.type == 'MINUS' or token.type == 'TIMES' or token.type == 'DIVIDE' or token.type == 'MOD':
             # Si tenemos BOOL o CHAR, tirar error porque no hace sentido hacer operaciones
             if type_flag == 'BOOL_TYPE' or type_flag == 'CHAR_TYPE':
                 print("Error in line",token.lineno,":  No se pueden hacer operaciones aritmeticas en variables tipo ",type_flag)
@@ -190,7 +196,105 @@ def assign_variable(token):
                 print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
                 sys.exit(2)
 
+def checkIfVariableIsDefined(token):
+    global symbol_table
+    if token.value in symbol_table.keys():
+        return True
+    else:
+        print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+        sys.exit(2)
 
+def modify_existing_variable(token):
+    global type_flag
+    global state
+    global current_variable_ID
+    global current_variable_value
+    global symbol_table
+    global current_operator
+
+    # Confirmar asignacion
+    if state == 0:
+        # Validacion
+        if token.type == 'ASSIGN':
+            state += 1
+        else:
+            print('Syntax error')
+            sys.exit(2)
+
+    # Esperar ID o un valor
+    elif state == 1:
+        # Si nos da un valor
+        if token.type == 'FLOAT' or token.type == 'INTEGER':
+            # 1. Checar si mi variable soporta ese tipo
+            if checkValue(token.value, type_flag):
+            # 2. Asignar esa variable
+                current_variable_value = token.value
+                state += 1
+            else:
+                print('Error in line',token.lineno,':  Variable type', type_flag, 'doesnt support value: ', token.value)
+                sys.exit(2)
+
+        # Si nos da un ID
+        elif token.type == 'ID':
+            # 1. Checar si ese ID ya existe en mi tabla de simbolos
+            if token.value in symbol_table.keys():
+                print("ID exists! : ", symbol_table[token.value])
+                # 2. Checar si sus tipos son compatibles
+                if checkValue(symbol_table[token.value]['value'], type_flag):
+                    # 2. Asignar esa variable
+                    current_variable_value = symbol_table[token.value]['value']
+                    state += 1
+                else:
+                    print('Error in line',token.lineno,': Variable type', type_flag, 'doesnt support value: ', symbol_table[token.value]['value'])
+                    sys.exit(2)
+            else:
+                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                sys.exit(2)
+
+    elif state == 2:
+        # Si el usuario quiere hacer una operacion durante asignacion
+        if token.type == 'PLUS' or token.type == 'MINUS' or token.type == 'TIMES' or token.type == 'DIVIDE' or token.type == 'MOD':
+            # Si tenemos BOOL o CHAR, tirar error porque no hace sentido hacer operaciones
+            if type_flag == 'BOOL_TYPE' or type_flag == 'CHAR_TYPE':
+                print("Error in line",token.lineno,":  No se pueden hacer operaciones aritmeticas en variables tipo ",type_flag)
+            # Estamos trabajando con un valor numerico, guardamos que tipo de operacion es.
+            else:
+                current_operator = token.type
+                state += 1
+        else:
+            if token.type != ';':
+                print("Error in line",token.lineno,": Syntax error")
+                sys.exit(2)
+
+    # Ya tenemos la operacion, ahora el valor
+    elif state == 3:
+        # Si nos da un valor
+        if token.type == 'FLOAT' or token.type == 'INTEGER':
+            # 1. Checar si mi variable soporta ese tipo
+            if checkValue(token.value, type_flag):
+            # 2. Asignar esa variable
+                current_variable_value = arithmetic(current_variable_value, token.value, current_operator)
+                state -= 1 # Regresamos a esperar otra operacion
+            else:
+                print('Error in line',token.lineno,':  Variable type', type_flag, 'doesnt support value: ', token.value)
+                sys.exit(2)
+
+        # Si nos da un ID
+        elif token.type == 'ID':
+            # 1. Checar si ese ID ya existe en mi tabla de simbolos
+            if token.value in symbol_table.keys():
+                print("ID exists! : ", symbol_table[token.value])
+                # 2. Checar si sus tipos son compatibles
+                if checkValue(symbol_table[token.value]['value'], type_flag):
+                    # 2. Asignar esa variable
+                    current_variable_value = arithmetic(current_variable_value, symbol_table[token.value]['value'], current_operator) 
+                    state -= 1 # Regresamos a esperar otra operacion
+                else:
+                    print('Error in line',token.lineno,': Variable type', type_flag, 'doesnt support value: ', symbol_table[token.value]['value'])
+                    sys.exit(2)
+            else:
+                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                sys.exit(2)
 
 def variables(token):
     global symbol_table
@@ -199,10 +303,12 @@ def variables(token):
     global type_flag
     global current_variable_ID
     global current_variable_value
+    global modify_existing_varaible_flag
+    global state
 
     # If we know we are assigning a variable:
     if token.type == ';':
-        if assign_variable_flag == True:
+        if assign_variable_flag == True or modify_existing_varaible_flag == True:
             assign_variable(token)
             print('Finished!',current_variable_ID, type_flag, current_variable_value)
             #var = Variable(current_variable_ID, type_flag, current_variable_value)
@@ -216,10 +322,26 @@ def variables(token):
         
     if assign_variable_flag == True:
         assign_variable(token)
+    
+    elif modify_existing_varaible_flag == True:
+        modify_existing_variable(token)
+        
     else: # We got a new token and don't know what to do with it
         if token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE':
             type_flag = token.type
             assign_variable_flag = True
+        
+        # What about we want to modify an existing variable?
+        elif token.type == 'ID':
+            # First we check if the variable already exists
+            if checkIfVariableIsDefined(token):
+                # Variable exists! yay
+                modify_existing_varaible_flag = True
+                # Guardar mi variable en mis flags
+                type_flag = symbol_table[token.value]['type']
+                current_variable_ID = token.value
+                current_variable_value = symbol_table[token.value]['value']
+
         else:
             print('pass')
 
