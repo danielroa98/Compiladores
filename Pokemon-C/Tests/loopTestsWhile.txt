@@ -1,0 +1,35 @@
+battle_start;
+pikachu x = 0;
+pikachu end = 10;
+pokemonwhile (x <= end){
+    print x;
+    x = x + 1;
+}
+battle_end;
+
+Token(type='START', value='battle_start', lineno=1, index=0)
+Token(type=';', value=';', lineno=1, index=12)
+pass
+Token(type='INT_TYPE', value='pikachu', lineno=2, index=14)
+Token(type='ID', value='x', lineno=2, index=22)
+Token(type='ASSIGN', value='=', lineno=2, index=24)
+Token(type='INTEGER', value=0, lineno=2, index=26)
+Token(type=';', value=';', lineno=2, index=27)
+Finished! x INT_TYPE 0
+{'x': {'type': 'INT_TYPE', 'value': 0}}
+pass
+Token(type='INT_TYPE', value='pikachu', lineno=3, index=29)
+Token(type='ID', value='end', lineno=3, index=37)
+Token(type='ASSIGN', value='=', lineno=3, index=41)
+Token(type='INTEGER', value=10, lineno=3, index=43)
+Token(type=';', value=';', lineno=3, index=45)
+Finished! end INT_TYPE 10
+{'x': {'type': 'INT_TYPE', 'value': 0}, 'end': {'type': 'INT_TYPE', 'value': 10}}
+pass
+Token(type='IF', value='if_i_choose_you', lineno=4, index=47)
+pass
+Token(type='(', value='(', lineno=4, index=63)
+pass
+Token(type='ID', value='x', lineno=4, index=64)
+Token(type='LE', value='<=', lineno=4, index=66)
+Syntax error mod 0

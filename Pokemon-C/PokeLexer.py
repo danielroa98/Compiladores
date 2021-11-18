@@ -3,9 +3,9 @@ import sys
 
 
 class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
 
 class CalcLexer(Lexer):
@@ -15,7 +15,7 @@ class CalcLexer(Lexer):
               EQ, LT, LE, GT, GE, NE, FOR,
               START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT}
 
-    literals = {'{', '}', '[', ']', ',', ';'}
+    literals = {'(', ')', '{', '}', '[', ']', ',', ';'}
 
     # String containing ignored characters
     ignore = ' \t'
