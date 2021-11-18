@@ -29,5 +29,6 @@ if __name__ == '__main__':
     # Obtain tokens
     tokens = PokeLexer.lexerStart(fileData)
     for tok in tokens:
-        tok = str(tok)
+        #tok = str(tok)
+        print(tok)
         PokeSemantics.init(tok)
