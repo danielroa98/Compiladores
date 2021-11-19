@@ -16,7 +16,7 @@ def assign_array_variable(token):
         if token.type == 'ID':
             # Validar que no exista el ID
             if token.value in GlobalVariables.symbol_table.keys():
-                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                print("Error in line",token.lineno,":  Variable ",token.value,' is already defined.')
                 sys.exit(2)
             else:
                 GlobalVariables.current_variable_ID = token.value
@@ -53,7 +53,7 @@ def assign_array_variable(token):
 
         elif token.type == ']':
             GlobalVariables.state = 6
-            
+
         else:
             print("ERROR: Expected a value")
             sys.exit(2)

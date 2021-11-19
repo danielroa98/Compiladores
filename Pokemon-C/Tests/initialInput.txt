@@ -1,5 +1,5 @@
 battle_start;
-pokebelt x = [];
-pokebelt y = [10,9,10];
-pikachu x = 10;
+pikachu y = 3;
+pikachu x = 10 + y;
+pokehabla(x);
 battle_end;

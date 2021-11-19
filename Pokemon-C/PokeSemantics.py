@@ -9,7 +9,11 @@ class Variable:
 
 # Variables: 
 import GlobalVariables
+
+# Analysis functions:
 import assign_array
+import prints
+import loopAndConditionalAnalysis
 
 def init(token):
     programInit(token)
@@ -35,7 +39,6 @@ def printErr(token, errcode):
 
 
 def programInit(token):
-    
     #if 'START' in token:
     if token.type == 'START':
         # print(GlobalVariables.start_flag)
@@ -46,8 +49,42 @@ def programInit(token):
             return
             # print("Changing the start flag:", GlobalVariables.start_flag)
     elif GlobalVariables.start_flag == True:
-        variables(token)
+        
+        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True:
+            print('')
+        else:
+            variables(token)
+
+        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True:
+            print('')
+        else:
+            prints.what_print(token)
+
+        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True:
+            print('')
+        else:
+            checkLoop(token)
         #if 'FINISH' in token:
+
+        '''
+        IFTYPE
+
+        if printflag == True or ifelse_flag == True or while_flag == True:
+            print('nono bitch')
+        else:
+            variables()
+
+        if variables_flag == True or ifelse_flag == True or while_flag == True:
+            print('nono bitch')
+        else:
+            prints()
+
+        # variables() X
+        prints() <- 
+        ifelse() X
+        while() X
+        '''
+
         if token.type == 'FINISH':
             programEnd(token)
     else:
@@ -74,15 +111,19 @@ def arithmetic(val1, val2, type):
     elif type == 'MOD':
         return val1%val2
 
-
 def assign_variable(token):
 
     # Guardamos ID
     if GlobalVariables.state == 0:
         # Validacion
         if token.type == 'ID':
-            GlobalVariables.current_variable_ID = token.value
-            GlobalVariables.state += 1
+            # Validar que no exista el ID
+            if token.value in GlobalVariables.symbol_table.keys():
+                print("Error in line",token.lineno,":  Variable ",token.value,' is already defined.')
+                sys.exit(2)
+            else:
+                GlobalVariables.current_variable_ID = token.value
+                GlobalVariables.state += 1
         else:
             print('Syntax error')
             sys.exit(2)
@@ -186,7 +227,7 @@ def modify_existing_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.state += 1
         else:
-            print('Syntax error')
+            print('Syntax error, MEV')
             sys.exit(2)
 
     # Esperar ID o un valor
@@ -313,7 +354,20 @@ def variables(token):
         else:
             print('pass')
     
+def checkLoop(token):
 
+    if GlobalVariables.if_flag == True or GlobalVariables.while_loop_flag == True:
+        loopAndConditionalAnalysis.checkConditional(token)
+        print('Sending to loopAndConditionalAnalysis file')
+    else:
+        if token.type == 'IF':
+            print('Checking IF statement')
+            GlobalVariables.if_flag = True
+            print(GlobalVariables.if_flag, 'current value')
+        elif token.type == 'WHILE':
+            print('Checking WHILE loop')
+            GlobalVariables.while_loop_flag = True
+            print(GlobalVariables.while_loop_flag, 'current value')
 
 
 def programEnd(token):

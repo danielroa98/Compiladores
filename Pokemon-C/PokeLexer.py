@@ -6,9 +6,10 @@ class CalcLexer(Lexer):
     tokens = {FLOAT, INTEGER, ID, BOOLEAN, ARR, WHILE, IF, ELSE, PRINT,
               PLUS, MINUS, TIMES, DIVIDE, ASSIGN, MOD,
               EQ, LT, LE, GT, GE, NE, FOR,
+              PRINT_IN_LINE, PRINT_IN_NEW_LINE,
               START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT}
 
-    literals = {'{', '}', '[', ']', ',', ';'}
+    literals = {'{', '}', '[', ']', ',', ';', '(', ')'}
 
     # String containing ignored characters
     ignore = ' \t'
@@ -53,6 +54,8 @@ class CalcLexer(Lexer):
     ID['charmander'] = CHAR_TYPE
     ID['pokebelt'] = ARR
     ID['pokemon'] = STRUCT
+    ID['pokehabla'] = PRINT_IN_LINE
+    ID['pokehabla_nl'] = PRINT_IN_NEW_LINE
 
     ignore_comment = r'\#.*'
 
