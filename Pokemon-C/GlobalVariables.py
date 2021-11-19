@@ -20,6 +20,11 @@ current_variable_value = ''
 current_operator = ''
 modify_existing_varaible_flag = False
 
+# Function flags
+declare_function_flag = False
+function_arg_type = ''
+function_args = []
+
 # Print flags
 print_in_line_flag = False
 print_in_newline_flag = False

@@ -14,6 +14,7 @@ import GlobalVariables
 import assign_array
 import prints
 import loopAndConditionalAnalysis
+import functions
 
 def init(token):
     programInit(token)
@@ -50,40 +51,27 @@ def programInit(token):
             # print("Changing the start flag:", GlobalVariables.start_flag)
     elif GlobalVariables.start_flag == True:
         
-        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True:
-            print('')
+        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True:
+            print('no variables')
         else:
             variables(token)
 
-        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True:
-            print('')
+        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True:
+            print('no print')
         else:
             prints.what_print(token)
 
-        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True:
-            print('')
+        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True:
+            print('no if')
         else:
             checkLoop(token)
+
+        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True:
         #if 'FINISH' in token:
-
-        '''
-        IFTYPE
-
-        if printflag == True or ifelse_flag == True or while_flag == True:
-            print('nono bitch')
+            print('no function')
         else:
-            variables()
+            functions.define_function(token)
 
-        if variables_flag == True or ifelse_flag == True or while_flag == True:
-            print('nono bitch')
-        else:
-            prints()
-
-        # variables() X
-        prints() <- 
-        ifelse() X
-        while() X
-        '''
 
         if token.type == 'FINISH':
             programEnd(token)

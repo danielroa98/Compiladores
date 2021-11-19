@@ -1,5 +1,5 @@
 battle_start;
-pikachu y = 3;
-pikachu x = 10 + y;
-pokehabla(x);
+move shadow x();
+move shadow y(pikachu a);
+move shadow z(pikachu a, pikachu b);
 battle_end;

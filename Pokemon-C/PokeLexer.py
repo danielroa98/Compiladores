@@ -4,9 +4,9 @@ import sys
 class CalcLexer(Lexer):
     # Set of token names.   This is always required
     tokens = {FLOAT, INTEGER, ID, BOOLEAN, ARR, WHILE, IF, ELSE, PRINT,
-              PLUS, MINUS, TIMES, DIVIDE, ASSIGN, MOD,
+              PLUS, MINUS, TIMES, DIVIDE, ASSIGN, MOD, VOID,
               EQ, LT, LE, GT, GE, NE, FOR,
-              PRINT_IN_LINE, PRINT_IN_NEW_LINE,
+              PRINT_IN_LINE, PRINT_IN_NEW_LINE, FUNC,
               START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT}
 
     literals = {'{', '}', '[', ']', ',', ';', '(', ')'}
@@ -53,9 +53,11 @@ class CalcLexer(Lexer):
     ID['bulbasaur'] = BOOL_TYPE
     ID['charmander'] = CHAR_TYPE
     ID['pokebelt'] = ARR
+    ID['move'] = FUNC
     ID['pokemon'] = STRUCT
     ID['pokehabla'] = PRINT_IN_LINE
     ID['pokehabla_nl'] = PRINT_IN_NEW_LINE
+    ID['shadow'] = VOID
 
     ignore_comment = r'\#.*'
 
