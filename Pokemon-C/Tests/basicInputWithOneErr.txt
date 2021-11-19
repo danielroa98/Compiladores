@@ -3,4 +3,5 @@ pikachu x = 100;
 pikachu y = 10 + x;
 x = 1000;
 y = x + 1;
+x = z + 10;
 battle_end;
