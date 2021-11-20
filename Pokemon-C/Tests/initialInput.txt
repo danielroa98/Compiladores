@@ -1,5 +1,10 @@
 battle_start;
-move shadow x();
-move shadow y(pikachu a);
+
+pokemon Pikachu{
+    pikachu vida;
+    squirtle poder;
+};
+
 move shadow z(pikachu a, pikachu b);
+
 battle_end;

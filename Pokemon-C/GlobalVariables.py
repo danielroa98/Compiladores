@@ -25,6 +25,11 @@ declare_function_flag = False
 function_arg_type = ''
 function_args = []
 
+# Struct
+declare_struct_flag = False
+struct_variable_ID = ''
+struct_variables = []
+
 # Print flags
 print_in_line_flag = False
 print_in_newline_flag = False
