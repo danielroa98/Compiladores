@@ -45,9 +45,12 @@ while_loop_flag = False
 # General variables for While and If
 var1_type = ''
 var1_value = ''
-comparacion = ''
 var2_type = ''
 var2_value = ''
+comparacion = ''
+
+# State detector in order to run the operations located inside the IF, ELSE or the WHILE.
+inner_operations_state = 0
 
 # Global Functions
 
@@ -88,19 +91,29 @@ def checkIfVariableIsDefined(token):
 
 def logicalOperations(var1, var2, operator):
     """ 
+    Function logicalOperations
+
+    Receives:
+        var1: the first variable obtained from the logical operation.
+        var2: the second variable obtained from the logical operation.
+        operator: the combination of symbols regarding the logical operator that's going to be analysed.
+    Returns:
+        boolean: This value can either be True or False, depends on the outcome of the operation.
+
+
     Additional information:
 
-    EQ -> r'=='
+    EQ -> ==
 
-    LE -> r'<='
+    LE -> <=
 
-    LT -> r'<'
+    LT -> <
 
-    GE -> r'>='
+    GE -> >=
 
-    GT -> r'>'
+    GT -> >
 
-    NE -> r'!='
+    NE -> !=
     """
     # print(operator)
     if operator == 'EQ':
@@ -133,3 +146,4 @@ def logicalOperations(var1, var2, operator):
             return True
         else:
             return False
+

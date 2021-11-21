@@ -53,29 +53,29 @@ def programInit(token):
     elif GlobalVariables.start_flag == True:
         
         if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
-            print('no variables')
+            print('No variable detected.')
         else:
             variables(token)
 
         if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
-            print('no print')
+            print('No print statement detected.')
         else:
             prints.what_print(token)
 
         if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
-            print('no if')
+            print('No if or while detected.')
         else:
             checkLoop(token)
 
         if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.declare_struct_flag == True:
         #if 'FINISH' in token:
-            print('no function')
+            print('No function detected.')
         else:
             functions.define_function(token)
 
         if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True:
             #if 'FINISH' in token:
-            print('no structure')
+            print('No structure detected.')
         else:
             structure.define_struct(token)
 

@@ -3,7 +3,8 @@ import sys
 
 def resetIfFlags():
     GlobalVariables.if_flag = False
-    GlobalVariables.state = False
+    GlobalVariables.state = 0
+    GlobalVariables.inner_operations_state = 0
     GlobalVariables.var1_type = ''
     GlobalVariables.var1_value = ''
     GlobalVariables.var2_type = ''
@@ -11,7 +12,14 @@ def resetIfFlags():
     GlobalVariables.comparacion = ''
 
 def checkConditional(token):
-
+    """ 
+    Function checkConditional
+    
+    Receives:
+        token: value of the current token being analysed.
+    Returns:
+        Nothing, updates values regarding the IF and WHILE operators.
+     """
     # 0. Esperamos un parentesis izquierdo
     if GlobalVariables.state == 0:
         if token.type == '(':
@@ -69,15 +77,18 @@ def checkConditional(token):
             print("ERROR: Esperaba un valor/variable segundo lugar")
             sys.exit(2)
 
-    # Ahora espero cerrar la comparacion
+    # Ahora espero cerrar la declaracion dentro del parentesis
     elif GlobalVariables.state == 4:
         if token.type == ')':
             print(GlobalVariables.comparacion)
 
             if GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
-                print('Si cumple\nState 4')
+                # print('Si cumple\nState 4')
+                print('\nLogical operation is true')
+                GlobalVariables.state = 6
             else:
-                print('Chole con tus quejas')
+                print('\nLogical operation is false')
+                print('Checking the existance of an ELSE')
                 GlobalVariables.state = 5
         else:
             print("ERROR: Esperaba un )")
@@ -87,10 +98,18 @@ def checkConditional(token):
     # Resetear todas las banderas declaradas
     # {'IF': var1 {TYPE: 'INT_TYPE', 'value': 100}, 'var2': {'type': 'INT_TYPE', 'value': 110}, OPERATION}
 
-    # me la pela todo el if, pero al else se a chupo
+    #The logical operation declared in the if doesn't work, enters the else
     elif GlobalVariables.state == 5:
+        print('\nCurrent state of the operations flag is', GlobalVariables.inner_operations_state)
         if token.type == 'ELSE':
-            print('wakey wakey is time fo school')
+            print("Logical operation in the IF didn't work, starting the ELSE")
+            GlobalVariables.inner_operations_state += 1
+        elif GlobalVariables.inner_operations_state == 1:
+            if token.type == '{':
+                print('Starting to check inside the ELSE')
+                GlobalVariables.inner_operations_state += 1
+            else:
+                print('ERROR: falta declarar un {')
             '''
             correrElse(token):
 
@@ -104,11 +123,22 @@ def checkConditional(token):
                     prints()
                     ...
             '''
+        elif GlobalVariables.inner_operations_state == 2:
+            print('\nStarting to evaluate the ELSE\n')
+            if token.type == '}':
+                resetIfFlags()
+            else:
+                print('\nEvaluating values inside the ELSE\n')
         else:
-            print('pass...')
+            print('Finishing evaluation inside the ELSE\n')
 
-    # Si paso, pero el else me la pela
+    #It entered the IF operation correctly, therefore it ignores the ELSE statement
     elif GlobalVariables.state == 6:
+        if token.type == '{':
+            GlobalVariables.state += 1
+        else:
+            print('ERROR: Esperaba un {')
+            sys.exit(2)
         '''
             state 0:
                 detectar {
@@ -120,8 +150,30 @@ def checkConditional(token):
                     ...
         '''
 
-    # Si paso, pero el else me la pela
+    #Si paso, ahora va a leer las operaciones dentro del loop o if
     elif GlobalVariables.state == 7:
+        if token.type == '}':
+            print('\nReseting flags\n')
+            resetIfFlags()
+        else:
+            print('\nEvaluating values in the IF cycle\n')
+            '''
+            correrElse(token):
+
+            state 0:
+                detectar {
+            
+            state 1:
+                si detecta }, reset flags, se acaba el if
+                si no:
+                    varaibles()
+                    prints()
+                    ...
+            '''
+
+
+    # Si paso, pero el else me la pela
+    elif GlobalVariables.state == 9:
         '''
             if token.type == }
                 reset flags
@@ -129,3 +181,4 @@ def checkConditional(token):
                 print(pass...)
             
         '''
+
