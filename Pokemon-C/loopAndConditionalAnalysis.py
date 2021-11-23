@@ -71,7 +71,7 @@ def checkConditional(token):
                 else:
                     print("ERROR: No son del mismo tipo, pelas")
             else:
-                print("WHILE Error in line", token.lineno, ":  Variable ",
+                print("Error in line", token.lineno, ":  Variable ",
                       token.value, ' is not defined.')
                 sys.exit(2)
         else:
@@ -182,6 +182,53 @@ def checkConditional(token):
                 print(pass...)
             
         '''
+
+def checkIfandElse(token):
+    """ 
+    Function checkIfandElse
+    
+    Receives:
+        token: value of the current token being analysed.
+    Returns:
+        Nothing, updates values regarding the IF and WHILE operators.
+    """
+    # State case 0: waiting for '('
+    if GlobalVariables.state == 0:
+        if token.type == '(':
+            GlobalVariables.state += 1
+        else:
+            print('ERROR: esperaba un (')
+    
+    # State case 1: waiting for the first variable to analyze
+    elif GlobalVariables.state == 1:
+        # Await to analyze the variable/value received
+        if token.type == 'ID':
+            #1. If the value received is in the symbol table
+            if token.value in GlobalVariables.symbol_table.keys():
+                print("ID exists! : ", GlobalVariables.symbol_table[token.value])
+                GlobalVariables.var1_type = GlobalVariables.symbol_table[token.value]['type']
+                GlobalVariables.var1_value = GlobalVariables.symbol_table[token.value]['value']
+                GlobalVariables.state += 1
+            else:
+                print("Error in line", token.lineno, ":  Variable ",
+                      token.value, ' is not defined.')
+                sys.exit(2)
+        else:
+            print('ERROR: esperaba un valor o una variable.')
+            sys.exit(2)
+    
+    #State case 2: awaiting the logical operation in the if.
+    elif GlobalVariables.state == 2:
+        if token.type == 'EQ' or token.type == 'LE' or token.type == 'GE' or token.type == 'GT' or token.type == 'LT' or token.type == 'NE':
+            GlobalVariables.comparacion = token.type
+            GlobalVariables.state += 1
+        else:
+            print("IF Error in line", token.lineno, ": Syntax error", token.value)
+            sys.exit(2)
+
+    #State case 3: awaiting the second variable to analyze
+    elif GlobalVariables.state == 3:
+
 
 def whileAnalysis(token):
     if GlobalVariables.state == 0:

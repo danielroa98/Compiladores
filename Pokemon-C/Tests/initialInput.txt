@@ -1,10 +1,10 @@
 battle_start;
 
-pokemon Pikachu{
-    pikachu vida;
-    squirtle poder;
-};
+pikachu x = 10;
 
 move shadow z(pikachu a, pikachu b);
+
+pikachu y = 10;
+
 
 battle_end;
