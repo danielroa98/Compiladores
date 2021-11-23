@@ -13,7 +13,8 @@ import GlobalVariables
 # Analysis functions:
 import assign_array
 import prints
-import loopAndConditionalAnalysis
+import runFunction
+#import loopAndConditionalAnalysis
 import functions
 import structure
 
@@ -52,37 +53,46 @@ def programInit(token):
             # print("Changing the start flag:", GlobalVariables.start_flag)
     elif GlobalVariables.start_flag == True:
         
-        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
-            #print('No variable detected.')
+        if GlobalVariables.run_function_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
+            print('No variable detected.')
             print('')
         else:
             variables(token)
 
-        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
-            #print('No print statement detected.')
+        if GlobalVariables.run_function_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
+            print('No print statement detected.')
             print('')
         else:
             prints.what_print(token)
 
-        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
-            #print('No if or while detected.')
+        if GlobalVariables.run_function_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
+            print('No if or while detected.')
             print('')
         else:
             checkLoop(token)
 
-        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
+        if GlobalVariables.run_function_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
         #if 'FINISH' in token:
-            #print('No function detected.')
+            print('No function detected.')
             print('')
         else:
             functions.define_function(token)
 
-        if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.while_loop_flag == True:
+        if GlobalVariables.run_function_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.while_loop_flag == True:
             #if 'FINISH' in token:
-            #print('No structure detected.')
+            print('No structure detected.')
             print('')
         else:
             structure.define_struct(token)
+
+        if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
+            #if 'FINISH' in token:
+            print('No function_run detected.')
+            print('')
+        else:
+            #structure.define_struct(token)
+            runFunction.run_function(token)
+            #print('yay')
 
 
         if token.type == 'FINISH':
@@ -340,16 +350,22 @@ def variables(token):
             GlobalVariables.type_flag = token.type
             GlobalVariables.assign_array_flag = True
 
-        # What about we want to modify an existing variable?
+        # What about we want to modify an existing variable? Maybe its a function
         elif token.type == 'ID':
             # First we check if the variable already exists
             if checkIfVariableIsDefined(token):
-                # Variable exists! yay
-                GlobalVariables.modify_existing_varaible_flag = True
-                # Guardar mi variable en mis flags
-                GlobalVariables.type_flag = GlobalVariables.symbol_table[token.value]['type']
-                GlobalVariables.current_variable_ID = token.value
-                GlobalVariables.current_variable_value = GlobalVariables.symbol_table[token.value]['value']
+                # Variable exists! yay Lets check if its a function
+
+                if GlobalVariables.symbol_table[token.value]['type'] == 'FUNC':
+                    print('Im a function!!!')
+                    
+
+                else:
+                    GlobalVariables.modify_existing_varaible_flag = True
+                    # Guardar mi variable en mis flags
+                    GlobalVariables.type_flag = GlobalVariables.symbol_table[token.value]['type']
+                    GlobalVariables.current_variable_ID = token.value
+                    GlobalVariables.current_variable_value = GlobalVariables.symbol_table[token.value]['value']
 
         else:
             print('pass')

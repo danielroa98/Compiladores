@@ -24,6 +24,10 @@ modify_existing_varaible_flag = False
 declare_function_flag = False
 function_arg_type = ''
 function_args = []
+function_tokens = []
+
+run_function_flag = False
+function_state = 0
 
 # Struct
 declare_struct_flag = False

@@ -2,9 +2,12 @@ battle_start;
 
 pikachu x = 10;
 
-move shadow z(pikachu a, pikachu b);
+move myfuc(){
+    x = x + 10;
+    pokehabla(x);
+};
 
-pikachu y = 10;
-
+myfuc();
+myfuc();
 
 battle_end;

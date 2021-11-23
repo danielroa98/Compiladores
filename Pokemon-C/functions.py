@@ -2,6 +2,17 @@ import sys
 import GlobalVariables
 
 
+
+'''
+Grammar
+
+FUNC -> ID -> ( -> VAR_TYPE -> ID -> , ...
+                -> ) -> {         -> ) -> { -> Save Token
+                                            -> } -> ;
+
+'''
+
+
 def resetFlags():
     GlobalVariables.state = 0
     GlobalVariables.current_variable_ID = ''
@@ -23,17 +34,9 @@ def define_function(token):
             print("pokefunction: pass")
 
 def pokefunction(token):
-    # Expecting a vartype
-    if GlobalVariables.state == 0:
-        # Espero un tipo de variable ("incluyedo SHADOW")
-        if token.type == 'VOID' or token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE':
-            GlobalVariables.type_flag = token.type
-            GlobalVariables.state += 1
-        else:
-            print('ERROR: Syntax, expected a VAR_TYPE')
     
     # I want the ID for the function
-    elif GlobalVariables.state == 1:
+    if GlobalVariables.state == 0:
         # Validacion
         if token.type == 'ID':
             # Validar que no exista el ID
@@ -49,7 +52,7 @@ def pokefunction(token):
             sys.exit(2)
 
     # Ya tenemos el tipo de print, ahora esperamos un '('
-    elif GlobalVariables.state == 2:
+    elif GlobalVariables.state == 1:
         # Validacion
         if token.type == '(':
             GlobalVariables.state += 1
@@ -58,7 +61,7 @@ def pokefunction(token):
             sys.exit(2)
 
     # LOOP WARNING: Expecting VAR_TYPE or )
-    elif GlobalVariables.state == 3:
+    elif GlobalVariables.state == 2:
          # Validacion
         # Espero un tipo de variable
         if token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE':
@@ -72,7 +75,7 @@ def pokefunction(token):
             sys.exit(2)
     
     # LOOP WARNING: Expecting an ID
-    elif GlobalVariables.state == 4:
+    elif GlobalVariables.state == 3:
         # Validacion
         if token.type == 'ID':
             # Guardar ID y su tipo
@@ -87,18 +90,45 @@ def pokefunction(token):
             sys.exit(2)
 
     # LOOP WARNING: , or )
-    elif GlobalVariables.state == 5:
+    elif GlobalVariables.state == 4:
         if token.type == ',':
-            GlobalVariables.state = 3
+            GlobalVariables.state = 2
 
         elif token.type == ')':
-            GlobalVariables.state = 6
+            GlobalVariables.state = 5
         else:
             print('Syntax error: Expected a ) or VAR_TYPE')
             sys.exit(2)
 
-    # Finish with ;
+    elif GlobalVariables.state == 5:
+        if token.type == '{':
+            GlobalVariables.state = 6
+        else:
+            print("ERROR: Expecting ;")
+
     elif GlobalVariables.state == 6:
+        if token.type == '}':
+            GlobalVariables.state = 7
+        else:
+            GlobalVariables.function_tokens.append(token)
+
+    elif GlobalVariables.state == 7:
+        if token.type == ';':
+            # Guardar fucion
+            GlobalVariables.symbol_table[GlobalVariables.current_variable_ID] = {
+                'type': 'FUNC',
+                'args': GlobalVariables.function_args,
+                'tokens': GlobalVariables.function_tokens
+            }
+            print('Finished! ',GlobalVariables.current_variable_ID, GlobalVariables.symbol_table[GlobalVariables.current_variable_ID])
+            resetFlags()
+
+        else:
+            print("ERROR: Expecting ;")
+
+    '''
+    # Finish with ;
+    elif GlobalVariables.state == 5:
         if token.type == ';':
             # Guardar fucion
             GlobalVariables.symbol_table[GlobalVariables.current_variable_ID] = {
@@ -112,3 +142,4 @@ def pokefunction(token):
 
         else:
             print("ERROR: Expecting ;")
+    '''
