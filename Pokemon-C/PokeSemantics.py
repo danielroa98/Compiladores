@@ -102,10 +102,15 @@ def programInit(token):
 
 # Funcion para checar si el valor cumple con el tipo de la variable
 def checkValue(value, type):
-    if type == 'INT_TYPE' and isinstance(value, int):
+    if type == 'BOOL_TYPE' and (value == True or value == False):
+        return True
+    elif type == 'INT_TYPE' and isinstance(value, int):
         return True
     elif type == 'FLOAT_TYPE' and isinstance(value, float):
         return True
+    elif type == 'CHAR_TYPE' and isinstance(value, str):
+        return True
+    
     else:
         return False
 
@@ -150,7 +155,7 @@ def assign_variable(token):
     # Esperar ID o un valor
     elif GlobalVariables.state == 2:
         # Si nos da un valor
-        if token.type == 'FLOAT' or token.type == 'INTEGER':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             # 1. Checar si mi variable soporta ese tipo
             if checkValue(token.value, GlobalVariables.type_flag):
             # 2. Asignar esa variable
@@ -195,7 +200,7 @@ def assign_variable(token):
     # Ya tenemos la operacion, ahora el valor
     elif GlobalVariables.state == 4:
         # Si nos da un valor
-        if token.type == 'FLOAT' or token.type == 'INTEGER':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             # 1. Checar si mi variable soporta ese tipo
             if checkValue(token.value, GlobalVariables.type_flag):
             # 2. Asignar esa variable
@@ -243,7 +248,7 @@ def modify_existing_variable(token):
     # Esperar ID o un valor
     elif GlobalVariables.state == 1:
         # Si nos da un valor
-        if token.type == 'FLOAT' or token.type == 'INTEGER':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             # 1. Checar si mi variable soporta ese tipo
             if checkValue(token.value, GlobalVariables.type_flag):
             # 2. Asignar esa variable
@@ -341,7 +346,7 @@ def variables(token):
         assign_array.assign_array_variable(token)
         
     else: # We got a new token and don't know what to do with it
-        if token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE':
+        if token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE' or token.type == 'CHAR_TYPE' or token.type == 'BOOL_TYPE':
             GlobalVariables.type_flag = token.type
             GlobalVariables.assign_variable_flag = True
         

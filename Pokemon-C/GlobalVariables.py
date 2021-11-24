@@ -73,6 +73,10 @@ def checkValue(value, type):
         return True
     elif type == 'FLOAT_TYPE' and isinstance(value, float):
         return True
+    elif type == 'BOOL_TYPE' and isinstance(value, bool):
+        return True
+    elif type == 'CHAR_TYPE' and isinstance(value, str):
+        return True
     else:
         return False
 
@@ -81,6 +85,10 @@ def arrCheckValue(value, type):
     if type == 'INTEGER' and isinstance(value, int):
         return True
     elif type == 'FLOAT' and isinstance(value, float):
+        return True
+    elif type == 'BOOL' and isinstance(value, bool):
+        return True
+    elif type == 'CHAR' and isinstance(value, str):
         return True
     else:
         return False

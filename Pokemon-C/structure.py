@@ -66,7 +66,7 @@ def pokemon_struct(token):
         if token.type == '}':
             GlobalVariables.state = 5
         # Espero un tipo de variable
-        elif token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE':
+        elif token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             GlobalVariables.type_flag = token.type
             GlobalVariables.state = 3
         else:

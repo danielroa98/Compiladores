@@ -3,9 +3,9 @@ import sys
 
 class CalcLexer(Lexer):
     # Set of token names.   This is always required
-    tokens = {FLOAT, INTEGER, ID, BOOLEAN, ARR, WHILE, IF, ELSE, PRINT,
+    tokens = {FLOAT, INTEGER, ID, BOOL, ARR, WHILE, IF, ELSE, PRINT,
               PLUS, MINUS, TIMES, DIVIDE, ASSIGN, MOD, VOID,
-              EQ, LT, LE, GT, GE, NE, FOR,
+              EQ, LT, LE, GT, GE, NE, FOR, CHAR,
               PRINT_IN_LINE, PRINT_IN_NEW_LINE, FUNC,
               START, FINISH, INT_TYPE, CHAR_TYPE, FLOAT_TYPE, BOOL_TYPE, STRUCT}
 
@@ -38,9 +38,19 @@ class CalcLexer(Lexer):
         t.value = int(t.value)
         return t
 
+    @_(r'green|red')
+    def BOOL(self, t):
+        if t.value == 'green':
+            t.value = True
+            return t
+        elif t.value == 'red':
+            t.value = False
+            return t
+
     # Identifiers and keywords
-    BOOLEAN = r'green|red'
+    #BOOLEAN = r'green|red'
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    CHAR = r'"[a-zA-Z]"'
     ID['if_i_choose_you'] = IF
     ID['else'] = ELSE
     ID['whilepokemon'] = WHILE

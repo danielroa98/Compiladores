@@ -8,6 +8,5 @@ move myfuc(){
 };
 
 myfuc();
-myfuc();
 
 battle_end;

@@ -43,7 +43,7 @@ def assign_variable(token):
     # Esperar ID o un valor
     elif GlobalVariables.state == 2:
         # Si nos da un valor
-        if token.type == 'FLOAT' or token.type == 'INTEGER':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             # 1. Checar si mi variable soporta ese tipo
             if GlobalVariables.checkValue(token.value, GlobalVariables.type_flag):
                 # 2. Asignar esa variable

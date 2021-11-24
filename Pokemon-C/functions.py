@@ -64,7 +64,7 @@ def pokefunction(token):
     elif GlobalVariables.state == 2:
          # Validacion
         # Espero un tipo de variable
-        if token.type == 'INT_TYPE' or token.type == 'FLOAT_TYPE':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             GlobalVariables.function_arg_type = token.type
             GlobalVariables.state += 1
 

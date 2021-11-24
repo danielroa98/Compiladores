@@ -46,7 +46,7 @@ def assign_array_variable(token):
 
     # Espero un valor
     elif GlobalVariables.state == 3:
-        if token.type == 'FLOAT' or token.type == 'INTEGER':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             GlobalVariables.array_values.append(token.value)
             GlobalVariables.type_flag = token.type # Vamos a comparar el resto de los valores
             GlobalVariables.state += 1
@@ -71,7 +71,7 @@ def assign_array_variable(token):
 
     # LOOP WARNING: Espero un valor
     elif GlobalVariables.state == 5:
-        if token.type == 'FLOAT' or token.type == 'INTEGER':
+        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             if GlobalVariables.arrCheckValue(token.value, GlobalVariables.type_flag):
                 GlobalVariables.array_values.append(token.value)
                 GlobalVariables.state -= 1
