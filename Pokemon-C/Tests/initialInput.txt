@@ -1,12 +1,7 @@
 battle_start;
 
-pikachu x = 10;
+pikachu y = 10;
 
-move myfuc(){
-    x = x + 10;
-    pokehabla(x);
-};
 
-myfuc();
 
 battle_end;

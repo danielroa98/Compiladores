@@ -47,7 +47,7 @@ def modify_existing_variable(token):
                     print('Error in line',token.lineno,': Variable type', GlobalVariables.type_flag, 'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined. 1')
                 sys.exit(2)
 
     elif GlobalVariables.state == 2:
@@ -92,7 +92,7 @@ def modify_existing_variable(token):
                     print('Error in line',token.lineno,': Variable type', GlobalVariables.type_flag, 'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined. 2')
                 sys.exit(2)
 
 def variables(token):
@@ -121,9 +121,10 @@ def variables(token):
         assign_array.assign_array_variable(token)
         
     else: # We got a new token and don't know what to do with it
-        if token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
+        if token.type == 'FLOAT_TYPE' or token.type == 'INT_TYPE' or token.type == 'CHAR_TYPE' or token.type == 'BOOL_TYPE':
             GlobalVariables.type_flag = token.type
             GlobalVariables.assign_variable_flag = True
+            print('aqui papi')
         
         # Ah fuck me es un arreglo
         elif token.type == 'ARR':
@@ -174,11 +175,18 @@ def checkIfVariableIsDefined(token):
     if token.value in GlobalVariables.symbol_table.keys():
         return True
     else:
-        print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+        print("Error in line",token.lineno,":  Variable ",token.value,' is not defined. 3')
         sys.exit(2)
 
+def checkIfVariableIsNOTDefined(token):
+    if token.value in GlobalVariables.symbol_table.keys():
+        print("Error in line",token.lineno,":  Variable ",token.value,' is not defined. 3')
+        sys.exit(2)
+    else:
+        return True
+
 def assign_variable(token):
-    
+    print('state', GlobalVariables.state)
     # Guardamos ID
     if GlobalVariables.state == 0:
         # Validacion
@@ -230,7 +238,7 @@ def assign_variable(token):
                     print('Error in line',token.lineno,': Variable type', GlobalVariables.type_flag, 'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined. 4')
                 sys.exit(2)
 
     elif GlobalVariables.state == 3:
@@ -275,7 +283,7 @@ def assign_variable(token):
                     print('Error in line',token.lineno,': Variable type', GlobalVariables.type_flag, 'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+                print("Error in line",token.lineno,":  Variable ",token.value,' is not defined. 5')
                 sys.exit(2)
 
 
