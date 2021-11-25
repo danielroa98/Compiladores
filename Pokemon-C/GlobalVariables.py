@@ -40,6 +40,13 @@ print_in_newline_flag = False
 
 # While loop and If variables
 
+# Variables used in order to identify the been done in the IF cycle
+if_print_flag = False
+if_print_new_line_flag = False
+if_new_variable_flag = False
+if_modify_variable_flag = False
+if_array_flag = False
+
 # If flags
 if_flag = False
 

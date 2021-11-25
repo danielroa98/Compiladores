@@ -14,7 +14,7 @@ import GlobalVariables
 import assign_array
 import prints
 import runFunction
-#import loopAndConditionalAnalysis
+import loopAndConditionalAnalysis
 import functions
 import structure
 import variables_doc
@@ -43,7 +43,6 @@ def printErr(token, errcode):
 
 
 def programInit(token):
-    #if 'START' in token:
     if token.type == 'START':
         # print(GlobalVariables.start_flag)
         if GlobalVariables.start_flag == True:
@@ -55,41 +54,41 @@ def programInit(token):
     elif GlobalVariables.start_flag == True:
         
         if GlobalVariables.run_function_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
-            print('No variable detected.')
+            #print('No variable detected.')
             print('')
         else:
             variables_doc.variables(token)
 
         if GlobalVariables.run_function_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
-            print('No print statement detected.')
+            #print('No print statement detected.')
             print('')
         else:
             prints.what_print(token)
 
         if GlobalVariables.run_function_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
-            print('No if or while detected.')
+            #print('No if or while detected.')
             print('')
         else:
-            #checkLoop(token)
+            checkLoop(token)
             print('')
 
         if GlobalVariables.run_function_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
         #if 'FINISH' in token:
-            print('No function detected.')
+            #print('No function detected.')
             print('')
         else:
             functions.define_function(token)
 
         if GlobalVariables.run_function_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.while_loop_flag == True:
             #if 'FINISH' in token:
-            print('No structure detected.')
+            #print('No structure detected.')
             print('')
         else:
             structure.define_struct(token)
 
         if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
             #if 'FINISH' in token:
-            print('No function_run detected.')
+            #print('No function_run detected.')
             print('')
         else:
             #structure.define_struct(token)
@@ -101,6 +100,26 @@ def programInit(token):
             programEnd(token)
     else:
         printErr(token, 1)
+
+def checkLoop(token):
+    # print("\nWhile flag Status: ", GlobalVariables.while_loop_flag,"If flag status: ", GlobalVariables.if_flag, '\n')
+    if GlobalVariables.if_flag == True or GlobalVariables.while_loop_flag == True:
+        if GlobalVariables.if_flag == True:
+            loopAndConditionalAnalysis.checkIfandElse(token)
+            # print('Sending to loopAndConditionalAnalysis file (IF/ELSE)')
+        elif GlobalVariables.while_loop_flag == True:
+            # print('Sending to loopAndConditionalAnalysis file (WHILE)')
+            # print('Sending token', token, 'to WHILE')
+            loopAndConditionalAnalysis.whileAnalysis(token)
+    else:
+        if token.type == 'IF':
+            print('Checking IF statement')
+            GlobalVariables.if_flag = True
+            # print(GlobalVariables.if_flag, 'current value')
+        elif token.type == 'WHILE':
+            print('Checking WHILE loop')
+            GlobalVariables.while_loop_flag = True
+            # print(GlobalVariables.while_loop_flag, 'current value')
 
 def programEnd(token):
     

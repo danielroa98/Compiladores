@@ -8,6 +8,9 @@ def resetFlags():
     GlobalVariables.state = 0
     GlobalVariables.current_variable_ID = ''
     GlobalVariables.current_variable_value = ''
+    GlobalVariables.if_new_variable_flag = False
+    GlobalVariables.if_modify_variable_flag = False
+    GlobalVariables.if_array_flag = False
 
 def modify_existing_variable(token):
     
@@ -96,9 +99,10 @@ def modify_existing_variable(token):
                 sys.exit(2)
 
 def variables(token):
+    print('Token recieved in variables', token)
         # If we know we are assigning a variable:
     if token.type == ';':
-        if GlobalVariables.assign_variable_flag == True or GlobalVariables.modify_existing_varaible_flag == True:
+        if GlobalVariables.assign_variable_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_new_variable_flag == True or GlobalVariables.if_modify_variable_flag == True or GlobalVariables.if_array_flag == True:
             assign_variable(token)
             print('Finished!',GlobalVariables.current_variable_ID, GlobalVariables.type_flag, GlobalVariables.current_variable_value)
             #var = Variable(GlobalVariables.current_variable_ID, GlobalVariables.type_flag, GlobalVariables.current_variable_value)
@@ -110,26 +114,35 @@ def variables(token):
             print(GlobalVariables.symbol_table)
             resetFlags()
 
-    if GlobalVariables.assign_variable_flag == True:
+    if GlobalVariables.assign_variable_flag == True or GlobalVariables.if_new_variable_flag == True:
         assign_variable(token)
     
-    elif GlobalVariables.modify_existing_varaible_flag == True:
+    elif GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_modify_variable_flag == True:
         modify_existing_variable(token)
     
     # Empezamos gramatica Array
-    elif GlobalVariables.assign_array_flag == True:
+    elif GlobalVariables.assign_array_flag == True or GlobalVariables.if_array_flag == True:
         assign_array.assign_array_variable(token)
         
     else: # We got a new token and don't know what to do with it
         if token.type == 'FLOAT_TYPE' or token.type == 'INT_TYPE' or token.type == 'CHAR_TYPE' or token.type == 'BOOL_TYPE':
-            GlobalVariables.type_flag = token.type
-            GlobalVariables.assign_variable_flag = True
-            print('aqui papi')
+            
+            # Si estamos dentro del if...
+            if GlobalVariables.if_flag == True:
+                GlobalVariables.if_new_variable_flag = True
+            else:
+                GlobalVariables.type_flag = token.type
+                GlobalVariables.assign_variable_flag = True
         
         # Ah fuck me es un arreglo
         elif token.type == 'ARR':
-            GlobalVariables.type_flag = token.type
-            GlobalVariables.assign_array_flag = True
+
+            if GlobalVariables.if_flag == True:
+                GlobalVariables.if_array_flag = True
+                GlobalVariables.type_flag = token.type
+            else:
+                GlobalVariables.type_flag = token.type
+                GlobalVariables.assign_array_flag = True
 
         # What about we want to modify an existing variable? Maybe its a function
         elif token.type == 'ID':
@@ -142,11 +155,20 @@ def variables(token):
                     
 
                 else:
-                    GlobalVariables.modify_existing_varaible_flag = True
-                    # Guardar mi variable en mis flags
-                    GlobalVariables.type_flag = GlobalVariables.symbol_table[token.value]['type']
-                    GlobalVariables.current_variable_ID = token.value
-                    GlobalVariables.current_variable_value = GlobalVariables.symbol_table[token.value]['value']
+                    
+                     # Si estamos dentro del if...
+                    if GlobalVariables.if_flag == True:
+                        GlobalVariables.if_modify_variable_flag = True
+                        # Guardar mi variable en mis flags
+                        GlobalVariables.type_flag = GlobalVariables.symbol_table[token.value]['type']
+                        GlobalVariables.current_variable_ID = token.value
+                        GlobalVariables.current_variable_value = GlobalVariables.symbol_table[token.value]['value']
+                    else:
+                        GlobalVariables.modify_existing_varaible_flag = True
+                        # Guardar mi variable en mis flags
+                        GlobalVariables.type_flag = GlobalVariables.symbol_table[token.value]['type']
+                        GlobalVariables.current_variable_ID = token.value
+                        GlobalVariables.current_variable_value = GlobalVariables.symbol_table[token.value]['value']
 
         else:
             print('pass')

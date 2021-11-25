@@ -7,21 +7,35 @@ def resetFlags():
     GlobalVariables.type_flag = ''
     GlobalVariables.print_in_line_flag = False
     GlobalVariables.print_in_newline_flag = False
+    GlobalVariables.if_print_flag = False
+    GlobalVariables.if_print_new_line_flag = False
 
 # 1. Definir que tipo de print viene
-def what_print(token):
+def what_print(token):    
     # Si ya inicie, lo mando a este metodo
-    if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True:
+    if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_print_flag == True or GlobalVariables.if_print_new_line_flag == True:
         pokeprint(token)
     
     # Si no, vamos a checar que tipo de token es
     else:
         if token.type == 'PRINT_IN_LINE':
-            GlobalVariables.type_flag = token.type
-            GlobalVariables.print_in_line_flag = True    
+
+             # Si estamos dentro del if...
+            if GlobalVariables.if_flag == True:
+                GlobalVariables.if_print_flag = True
+                GlobalVariables.type_flag = token.type
+            else:
+                GlobalVariables.type_flag = token.type
+                GlobalVariables.print_in_line_flag = True
+
         elif token.type == 'PRINT_IN_NEW_LINE':
-            GlobalVariables.type_flag = token.type
-            GlobalVariables.print_in_newline_flag = True
+
+            if GlobalVariables.if_flag == True:
+                GlobalVariables.if_print_new_line_flag = True
+                GlobalVariables.type_flag = token.type
+            else:
+                GlobalVariables.type_flag = token.type
+                GlobalVariables.print_in_newline_flag = True
         else:
             print("pokeprint: pass")
 
@@ -67,7 +81,7 @@ def pokeprint(token):
         if token.type == ';':
             # Yay!
             if GlobalVariables.print_in_line_flag == True:
-                print(GlobalVariables.symbol_table[GlobalVariables.current_variable_ID]['value'])
+                print(' Sor roa y te escupo esto:',GlobalVariables.symbol_table[GlobalVariables.current_variable_ID]['value'])
                 resetFlags()
 
             elif GlobalVariables.print_in_newline_flag == True:
