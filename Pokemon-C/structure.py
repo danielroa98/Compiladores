@@ -16,6 +16,7 @@ STRUCT -> ID -> { -> VAR_TYPE -> ID -> ; -> VAR_TYPE -> ID *...
 
 def resetFlags():
     GlobalVariables.state = 0
+    GlobalVariables.struct_state = 0
     GlobalVariables.current_variable_ID = ''
     GlobalVariables.type_flag = ''
     GlobalVariables.declare_struct_flag = False
@@ -32,11 +33,11 @@ def define_struct(token):
         if token.type == 'STRUCT':
             GlobalVariables.declare_struct_flag = True 
         else:
-            print("pokefunction: pass")
+            print("pokestruct: pass")
 
 def pokemon_struct(token):
     # Obtenemos el ID de la estuctura
-    if GlobalVariables.state == 0:
+    if GlobalVariables.struct_state == 0:
         # Validacion
         if token.type == 'ID':
             # Validar que no exista el ID
@@ -45,59 +46,59 @@ def pokemon_struct(token):
                 sys.exit(2)
             else:
                 GlobalVariables.current_variable_ID = token.value
-                GlobalVariables.state += 1
+                GlobalVariables.struct_state += 1
 
         else:
             print('Syntax error')
             sys.exit(2)
 
     # Esperamos un {
-    elif GlobalVariables.state == 1:
+    elif GlobalVariables.struct_state == 1:
          # Validacion
         if token.type == '{':
-            GlobalVariables.state += 1
+            GlobalVariables.struct_state += 1
         else:
             print("Error in line",token.lineno,":  Expected a {")
             sys.exit(2)
 
     # LOOP WARNING: Esperamos ya sea un VAR_TYPE o }
-    elif GlobalVariables.state == 2:
+    elif GlobalVariables.struct_state == 2:
         # Si recibo un }, significa que la declaracio de mi STRUCT termino
         if token.type == '}':
-            GlobalVariables.state = 5
+            GlobalVariables.struct_state = 5
         # Espero un tipo de variable
         elif token.type == 'FLOAT' or token.type == 'INTEGER' or token.type == 'CHAR' or token.type == 'BOOL':
             GlobalVariables.type_flag = token.type
-            GlobalVariables.state = 3
+            GlobalVariables.struct_state = 3
         else:
             print("Error in line",token.lineno,":  Expected a VAR_TYPE or }")
             sys.exit(2)
 
     # LOOP WARNING: Esperamos el ID de la variable
-    elif GlobalVariables.state == 3:
+    elif GlobalVariables.struct_state == 3:
         # Esperamos ID
         if token.type == 'ID':
             GlobalVariables.struct_variable_ID = token.value
-            GlobalVariables.state = 4
+            GlobalVariables.struct_state = 4
         else:
             print("Error in line",token.lineno,":  Expected an ID")
             sys.exit(2)
     
     # LOOP WARNING: Esperamos ; como fin de la variable
-    elif GlobalVariables.state == 4:
+    elif GlobalVariables.struct_state == 4:
          # Validacion
         if token.type == ';':
             GlobalVariables.struct_variables.append({
                 'type': GlobalVariables.type_flag,
                 'ID': GlobalVariables.struct_variable_ID
             })
-            GlobalVariables.state = 2
+            GlobalVariables.struct_state = 2
         else:
             print("Error in line",token.lineno,":  Expected a ;")
             sys.exit(2)
 
     # Se termino el STRUCT
-    elif GlobalVariables.state == 5:
+    elif GlobalVariables.struct_state == 5:
          # Validacion
         if token.type == ';':
             GlobalVariables.symbol_table[GlobalVariables.current_variable_ID] = {

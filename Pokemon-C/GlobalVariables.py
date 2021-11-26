@@ -15,6 +15,8 @@ assign_variable_flag = False
 assign_array_flag = False
 type_flag = ''
 state = 0
+variable_state = 0
+struct_state = 0
 current_variable_ID = ''
 current_variable_value = ''
 current_operator = ''
@@ -39,6 +41,9 @@ print_in_line_flag = False
 print_in_newline_flag = False
 
 # While loop and If variables
+
+if_state_flag = False
+conditional_op_flag = False
 
 # Variables used in order to identify the been done in the IF cycle
 if_print_flag = False

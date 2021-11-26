@@ -10,7 +10,7 @@ import variables_doc
 def resetIfFlags():
     GlobalVariables.if_flag = False
     GlobalVariables.while_loop_flag = False
-    GlobalVariables.state = 0
+    GlobalVariables.if_state_flag = 0
     GlobalVariables.inner_operations_state = 0
     GlobalVariables.var1_type = ''
     GlobalVariables.var1_value = ''
@@ -24,27 +24,17 @@ def resetIfFlags():
     GlobalVariables.if_array_flag = False
 
 def checkIfandElse(token):
-    
-    print(' SOY EL STATE: ', GlobalVariables.state)
-    
-    """ 
-    Function checkIfandElse
-    
-    Receives:
-        token: value of the current token being analysed.
-    Returns:
-        Nothing, updates values regarding the IF and WHILE operators.
-    """
+    print('Checking IF')
     # State case 0: waiting for '('
-    if GlobalVariables.state == 0:
+    if GlobalVariables.if_state_flag == 0:
         if token.type == '(':
-            GlobalVariables.state += 1
+            GlobalVariables.if_state_flag += 1
         else:
             print('ERROR: esperaba un (')
             sys.exit(2)
     
     # State case 1: waiting for the first variable to analyze
-    elif GlobalVariables.state == 1:
+    elif GlobalVariables.if_state_flag == 1:
         # Await to analyze the variable/value received
         if token.type == 'ID':
             #1. If the value received is in the symbol table
@@ -52,7 +42,7 @@ def checkIfandElse(token):
                 print("ID exists! : ", GlobalVariables.symbol_table[token.value])
                 GlobalVariables.var1_type = GlobalVariables.symbol_table[token.value]['type']
                 GlobalVariables.var1_value = GlobalVariables.symbol_table[token.value]['value']
-                GlobalVariables.state += 1
+                GlobalVariables.if_state_flag += 1
             else:
                 print("Error in line", token.lineno, ":  Variable ",
                       token.value, ' is not defined.')
@@ -62,17 +52,17 @@ def checkIfandElse(token):
             sys.exit(2)
     
     #State case 2: awaiting the logical operation in the if.
-    elif GlobalVariables.state == 2:
+    elif GlobalVariables.if_state_flag == 2:
         print('Second state\n')
         if token.type == 'EQ' or token.type == 'LE' or token.type == 'GE' or token.type == 'GT' or token.type == 'LT' or token.type == 'NE':
             GlobalVariables.comparacion = token.type
-            GlobalVariables.state += 1
+            GlobalVariables.if_state_flag += 1
         else:
             print("IF Error in line", token.lineno, ": Syntax error", token.value)
             sys.exit(2)
 
     #State case 3: awaiting the second variable to analyze
-    elif GlobalVariables.state == 3:
+    elif GlobalVariables.if_state_flag == 3:
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
@@ -81,7 +71,7 @@ def checkIfandElse(token):
                 if GlobalVariables.checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.var1_type):
                     GlobalVariables.var2_type = GlobalVariables.symbol_table[token.value]['type']
                     GlobalVariables.var2_value = GlobalVariables.symbol_table[token.value]['value']
-                    GlobalVariables.state += 1
+                    GlobalVariables.if_state_flag += 1
                 else:
                     print("ERROR: Las variables no son del mismo tipo")
                     sys.exit(2)
@@ -94,36 +84,39 @@ def checkIfandElse(token):
             sys.exit(2)
     
     # State case 4: awaiting the second parenthesis in order to validate the logical operation
-    elif GlobalVariables.state == 4:
+    elif GlobalVariables.if_state_flag == 4:
         if token.type == ')':
             # print(GlobalVariables.comparacion)
+
+
 
             if GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
                 # print('Si cumple\nState 4')
                 print('\nLogical operation is true')
-                GlobalVariables.state += 1
+                GlobalVariables.if_state_flag += 1
+                GlobalVariables.conditional_op_flag = True
             else:
                 print('\nLogical operation is false')
                 print('Checking the existance of an ELSE')
-                GlobalVariables.state = 8
+                GlobalVariables.if_state_flag = 7
         else:
             print("ERROR: Esperaba un )")
             sys.exit(2)
 
     # State case 5: awaits the openning bracket in order to start reading the contents of the IF.
-    elif GlobalVariables.state == 5:
+    elif GlobalVariables.if_state_flag == 5:
         print('\nIn state 5', token)
         if token.type == '{':
-            GlobalVariables.state += 1
+            GlobalVariables.if_state_flag += 1
         else:
             print('ERROR: esperaba un {')
             sys.exit(2)
 
     # State case 6: starts reading the operations inside the if cycle while it awaits a closing bracket
-    elif GlobalVariables.state == 6:
+    elif GlobalVariables.if_state_flag == 6:
         
         if token.type == '}':
-            GlobalVariables.state = 8
+            GlobalVariables.if_state_flag = 8
         else:
             print('Reading variables')
             program_init(token)
@@ -140,24 +133,33 @@ def checkIfandElse(token):
         """
     
     # State case 7: awaits the closing bracket corresponding to the IF statement 
-    elif GlobalVariables.state == 7:
-        print('Token', token)
+    elif GlobalVariables.if_state_flag == 7:
         if token.type == '}':
-            GlobalVariables.state += 1
+            GlobalVariables.if_state_flag += 1
+        elif token.type != '}' and GlobalVariables.conditional_op_flag == False:
+            print('Ignoring content')
         else:
             print('ERROR: esperaba un }')
             sys.exit(2)
     
     # State case 8: awaiting the declaration of the else or the ;
-    elif GlobalVariables.state == 8:
-        print('Current state flag is', GlobalVariables.state)
-        if token.type == 'ELSE':
+    elif GlobalVariables.if_state_flag == 8:
+        if token.type == 'ELSE' and GlobalVariables.conditional_op_flag == False:
             print('Detected an else')
-            GlobalVariables.state = 5
-        elif token.type == ';':
-            print('Closing statement')
+            GlobalVariables.if_state_flag = 5
+        elif GlobalVariables.conditional_op_flag == True:
+            print('Ignoring ELSE')
+            if token.type == ';':
+                print('Closing statement')
+                resetIfFlags()
+                print('Resetted flags')
+        elif token.type==';' and GlobalVariables.conditional_op_flag == False:
+            print('If was false\nNo else detected')
             resetIfFlags()
-
+            print('Resetted flags')
+        else:
+            print('ERROR: no hay seguimiento en la operación. (Falta un ELSE o un ;)')
+            sys.exit(2)
 
 def whileAnalysis(token):
     if GlobalVariables.state == 0:
