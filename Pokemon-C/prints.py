@@ -77,15 +77,16 @@ def pokeprint(token):
     
     # Ahora esperamos un ';'
     elif GlobalVariables.state == 3:
+        print('Checking for ;')
         # Validacion
         if token.type == ';':
             # Yay!
             if GlobalVariables.print_in_line_flag == True:
-                print(' Sor roa y te escupo esto:',GlobalVariables.symbol_table[GlobalVariables.current_variable_ID]['value'])
+                # print(' Sor roa y te escupo esto:',GlobalVariables.symbol_table[GlobalVariables.current_variable_ID]['value'])
                 resetFlags()
 
             elif GlobalVariables.print_in_newline_flag == True:
-                print('\n',GlobalVariables.symbol_table[GlobalVariables.current_variable_ID]['value'])
+                print('\nJKFHGJKSDFHGJKLSD',GlobalVariables.symbol_table[GlobalVariables.current_variable_ID]['value'])
                 resetFlags()
 
         else:

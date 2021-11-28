@@ -1,8 +1,8 @@
 battle_start;
 pikachu x = 1;
-pikachu y = 10;
-whilepokemon(x <= y){
-    pokehabla(x);
-    x = x+1;
-}
+pikachu y = 3;
+pokehabla(x);
+whilepokemon(x < y){
+    x = x + 1;
+};
 battle_end;

@@ -2,6 +2,7 @@ battle_start;
 pikachu x = 1;
 pikachu end = 10;
 if_i_choose_you(x < end){
+    x = x + 1;
     pokehabla(x);
 };
 battle_end;

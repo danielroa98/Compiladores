@@ -57,6 +57,11 @@ if_flag = False
 
 # While flags
 while_loop_flag = False
+while_logical_op = []
+token_list = []
+while_state = 0
+while_list_len = 0
+while_counter = 0
 
 # General variables for While and If
 var1_type = ''
