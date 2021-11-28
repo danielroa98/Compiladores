@@ -23,6 +23,7 @@ def resetIfFlags():
     GlobalVariables.if_new_variable_flag = False
     GlobalVariables.if_modify_variable_flag = False
     GlobalVariables.if_array_flag = False
+    GlobalVariables.conditional_op_flag = False
 
 
 def resetWhileFlags():
@@ -42,6 +43,7 @@ def resetWhileFlags():
     GlobalVariables.while_logical_op = []
     GlobalVariables.token_list = []
     GlobalVariables.while_state = 0
+    GlobalVariables.conditional_op_flag = False
 
 
 def checkIfandElse(token):
@@ -174,13 +176,11 @@ def checkIfandElse(token):
 
 def whileAnalysis(token):
 
-    print('HELLO BITCHARD Current state is', GlobalVariables.while_state)
     # State 0: start logical operation in the WHILE loop
     if GlobalVariables.while_state == 0:
         # print('State 0 received', token)
         if token.type == '(':
             GlobalVariables.while_state += 1
-            print('Current value of state flag', GlobalVariables.while_state)
         else:
             print('ERROR: Esperaba un (')
             sys.exit(2)
@@ -249,16 +249,15 @@ def whileAnalysis(token):
             print(GlobalVariables.comparacion)
 
             if GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
-                # print('Si cumple\nState 4')
-                # Since the operation is true, the state will become 5 and it will start reading the contents of the WHILE.
+                GlobalVariables.conditional_op_flag = True
                 print('\nLogical operation is true')
                 GlobalVariables.while_state += 1
 
             else:
                 print('\nLogical operation is false')
                 print('Exiting while')
-                # TODO - fix state👀
-                GlobalVariables.while_state = 6
+                GlobalVariables.conditional_op_flag = False
+                GlobalVariables.while_state = 8
         else:
             print("ERROR: Esperaba un )")
             sys.exit(2)
@@ -271,24 +270,11 @@ def whileAnalysis(token):
             print('ERROR: Esperaba un {')
             sys.exit(2)
 
-        """ if GlobalVariables.inner_operations_state == 1:
-            print('Started to processing the operations')
-            GlobalVariables.inner_operations_state += 1
-        
-        elif GlobalVariables.inner_operations_state == 2:
-            if token.type == '}':
-                GlobalVariables.while_state += 1
-            else:
-                print('\nEvaluating inside the WHILE\n') """
-
     elif GlobalVariables.while_state == 6:
-        print('SADHLFGBSDJHBF WAIT FOR }', token)
         if token.type == '}':
 
             GlobalVariables.while_list_len = len(GlobalVariables.token_list)
             print('FOUND THE FEET PICKS')
-
-    #{'x': {'type': 'INT_TYPE', 'value': 42}, 'y': {'type': 'INT_TYPE', 'value': 3}}
 
             while GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
                 print('Current values are:', GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion), 'X=', GlobalVariables.var1_value, 'Y=',GlobalVariables.var2_value)
@@ -305,7 +291,6 @@ def whileAnalysis(token):
                 # GlobalVariables.while_state += 1
                 print('IM ALL OUT OF LOVE')
             GlobalVariables.while_state+=1
-            
         else:
             GlobalVariables.token_list.append(token)
 
@@ -315,6 +300,15 @@ def whileAnalysis(token):
             resetIfFlags()
         else:
             print('ERROR: missing ;')
+            sys.exit(2)
+
+    elif GlobalVariables.while_state == 8:
+        if token.type == '}':
+            GlobalVariables.while_state = 7
+        elif token.type != '}' and GlobalVariables.conditional_op_flag == False:
+            print('Ignoring content')
+        else:
+            print('ERROR: esperaba un }')
             sys.exit(2)
 
 # Program INIT
