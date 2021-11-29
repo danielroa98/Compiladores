@@ -16,14 +16,14 @@ def assign_array_variable(token):
         if token.type == 'ID':
             # Validar que no exista el ID
             if token.value in GlobalVariables.symbol_table.keys():
-                print("Error en la línea",token.lineno,":  La variable ",token.value,' ya está definida.')
+                print('Error en la línea',token.lineno,':  La variable ',token.value,' ya está definida.')
                 sys.exit(2)
             else:
                 GlobalVariables.current_variable_ID = token.value
                 GlobalVariables.state += 1
 
         else:
-            print('Error de sintáxis')
+            print('Error en la línea', token.lineno, ': sintáxis')
             sys.exit(2)
     
     # Espero un '='
@@ -32,7 +32,7 @@ def assign_array_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.state += 1
         else:
-            print('Error de sintáxis: Esperaba un =')
+            print('Error en la línea', token.lineno, ': sintáxis: Esperaba un =')
             sys.exit(2)
     
     # Espero un '['
@@ -41,7 +41,7 @@ def assign_array_variable(token):
         if token.type == '[':
             GlobalVariables.state += 1
         else:
-            print('Error de sintáxis: Esperanba un [')
+            print('Error en la línea', token.lineno, ': sintáxis: Esperanba un [')
             sys.exit(2)
 
     # Espero un valor
@@ -55,7 +55,7 @@ def assign_array_variable(token):
             GlobalVariables.state = 6
 
         else:
-            print("ERROR: Esperaba un valor")
+            print('Error en la línea', token.lineno, ':  Esperaba un valor')
             sys.exit(2)
 
     # LOOP WARNING: Espero un ',' o ']'
@@ -66,7 +66,7 @@ def assign_array_variable(token):
         elif token.type == ']':
             GlobalVariables.state = 6
         else:
-            print("ERROR: Esperaba una ,")
+            print('ERROR: Esperaba una ,')
             sys.exit(2)
 
     # LOOP WARNING: Espero un valor
@@ -76,11 +76,11 @@ def assign_array_variable(token):
                 GlobalVariables.array_values.append(token.value)
                 GlobalVariables.state -= 1
             else:
-                print("ERROR: Variable no es del mismo tipo ",GlobalVariables.type_flag)
+                print('Error en la línea', token.lineno, ':  Variable no es del mismo tipo ',GlobalVariables.type_flag)
                 sys.exit(2)
 
         else:
-            print("ERROR: Esperaba un valor")
+            print('Error en la línea', token.lineno, ':  Esperaba un valor')
             sys.exit(2)
 
     # Terminar asignacion
@@ -89,13 +89,13 @@ def assign_array_variable(token):
             #Ya terminó el programa
             print('Ya terminé!',GlobalVariables.type_flag,GlobalVariables.current_variable_ID,'el tamaño es de:',len(GlobalVariables.array_values))
             GlobalVariables.symbol_table[GlobalVariables.current_variable_ID] = {
-                "type": GlobalVariables.type_flag,
-                "size": len(GlobalVariables.array_values),
-                "value": GlobalVariables.array_values
+                'type': GlobalVariables.type_flag,
+                'size': len(GlobalVariables.array_values),
+                'value': GlobalVariables.array_values
             }
             resetFlags()
 
         else:
-            print('Error de sintáxis: esperaba un ASSIGN o un ;')
+            print('Error en la línea', token.lineno, ': sintáxis: esperaba un ASSIGN o un ;')
             sys.exit(2)
 

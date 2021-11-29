@@ -42,7 +42,7 @@ def prepare_function(token):
         if token.type == '(':
             GlobalVariables.function_state += 1
         else:
-            print('Error de sintáxis: Esperaba un (')
+            print('Error en la línea', token.lineno, ':  Esperaba un (')
             sys.exit(2)
 
     elif GlobalVariables.function_state == 1:
@@ -50,7 +50,7 @@ def prepare_function(token):
         if token.type == ')':
             GlobalVariables.function_state += 1
         else:
-            print('Error de sintáxis: Esperaba un )')
+            print('Error en la línea', token.lineno, ':  Esperaba un )')
             sys.exit(2)
 
     elif GlobalVariables.function_state == 2:
@@ -66,7 +66,7 @@ def prepare_function(token):
             func_resetFlags()
 
         else:
-            print('Error de sintáxis: Esperaba un ;')
+            print('Error en la línea', token.lineno, ':  Esperaba un ;')
             sys.exit(2)
 
 

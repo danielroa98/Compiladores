@@ -23,7 +23,7 @@ def modify_existing_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.variable_state += 1
         else:
-            print('Syntax error, MEV')
+            print('Error en la línea', token.lineno, ': Syntax error, MEV')
             sys.exit(2)
 
     # Esperar ID o un valor
@@ -224,7 +224,7 @@ def assign_variable(token):
                 GlobalVariables.current_variable_ID = token.value
                 GlobalVariables.variable_state += 1
         else:
-            print('Error de sintáxis.')
+            print('Error en la línea', token.lineno, ': Error de sintáxis.')
             sys.exit(2)
 
     # Confirmar asignacion
@@ -233,7 +233,7 @@ def assign_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.variable_state += 1
         else:
-            print('Error de sintáxis.')
+            print('Error en la línea', token.lineno, ': Error de sintáxis.')
             sys.exit(2)
 
     # Esperar ID o un valor

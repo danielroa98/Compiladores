@@ -52,7 +52,7 @@ def checkIfandElse(token):
         if token.type == '(':
             GlobalVariables.if_state_flag += 1
         else:
-            print('ERROR: esperaba un (')
+            print('Error en la línea', token.lineno, ': esperaba un (')
             sys.exit(2)
 
     # State case 1: waiting for the first variable to analyze
@@ -61,15 +61,15 @@ def checkIfandElse(token):
         if token.type == 'ID':
             # 1. If the value received is in the symbol table
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID existe! : ", GlobalVariables.symbol_table[token.value])
+                print('ID existe! : ', GlobalVariables.symbol_table[token.value])
                 GlobalVariables.var1_type = GlobalVariables.symbol_table[token.value]['type']
                 GlobalVariables.var1_value = GlobalVariables.symbol_table[token.value]['value']
                 GlobalVariables.if_state_flag += 1
             else:
-                print("Error en la línea", token.lineno, ":  La variable ", token.value, ' no está definida.')
+                print('Error en la línea', token.lineno, ':  La variable ', token.value, ' no está definida.')
                 sys.exit(2)
         else:
-            print('ERROR: Esperaba el nombre de una variable.')
+            print('Error en la línea', token.lineno, ':  Esperaba el nombre de una variable.')
             sys.exit(2)
 
     # State case 2: awaiting the logical operation in the if.
@@ -78,7 +78,7 @@ def checkIfandElse(token):
             GlobalVariables.comparacion = token.type
             GlobalVariables.if_state_flag += 1
         else:
-            print("Error en la línea", token.lineno, ": Error de sintáxis", token.value)
+            print('Error en la línea', token.lineno, ': Error de sintáxis', token.value)
             sys.exit(2)
 
     # State case 3: awaiting the second variable to analyze
@@ -86,20 +86,20 @@ def checkIfandElse(token):
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID existe! : ", GlobalVariables.symbol_table[token.value])
+                print('ID existe! : ', GlobalVariables.symbol_table[token.value])
                 if GlobalVariables.checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.var1_type):
                     GlobalVariables.var2_type = GlobalVariables.symbol_table[token.value]['type']
                     GlobalVariables.var2_value = GlobalVariables.symbol_table[token.value]['value']
                     GlobalVariables.if_state_flag += 1
                 else:
-                    print("ERROR: Las variables no son del mismo tipo")
+                    print('Error en la línea', token.lineno, ': Las variables no son del mismo tipo')
                     sys.exit(2)
             else:
-                print("Error en la línea", token.lineno, ":  La variable ",
+                print('Error en la línea', token.lineno, ':  La variable ',
                       token.value, ' no está definida.')
                 sys.exit(2)
         else:
-            print("ERROR: Esperaba el nombre de una variable.")
+            print('Error en la línea', token.lineno, ':  Esperaba el nombre de una variable.')
             sys.exit(2)
 
     # State case 4: awaiting the second parenthesis in order to validate the logical operation
@@ -113,7 +113,7 @@ def checkIfandElse(token):
             else:
                 GlobalVariables.if_state_flag = 7
         else:
-            print("ERROR: Esperaba un )")
+            print('Error en la línea', token.lineno, ':  Esperaba un )')
             sys.exit(2)
 
     # State case 5: awaits the openning bracket in order to start reading the contents of the IF.
@@ -121,7 +121,7 @@ def checkIfandElse(token):
         if token.type == '{':
             GlobalVariables.if_state_flag += 1
         else:
-            print('ERROR: esperaba un {')
+            print('Error en la línea', token.lineno, ':  esperaba un {')
             sys.exit(2)
 
     # State case 6: starts reading the operations inside the if cycle while it awaits a closing bracket
@@ -139,7 +139,7 @@ def checkIfandElse(token):
         elif token.type != '}' and GlobalVariables.conditional_op_flag == False:
             print('AVISO: Ignorando el contenido del if.')
         else:
-            print('ERROR: esperaba un }')
+            print('Error en la línea', token.lineno, ': esperaba un }')
             sys.exit(2)
 
     # State case 8: awaiting the declaration of the else or the ;
@@ -152,7 +152,7 @@ def checkIfandElse(token):
         elif token.type == ';' and GlobalVariables.conditional_op_flag == False:
             resetIfFlags()
         else:
-            print('ERROR: no hay seguimiento en la operación. (Falta un ELSE o un ;)')
+            print('Error en la línea', token.lineno, ': no hay seguimiento en la operación. (Falta un ELSE o un ;)')
             sys.exit(2)
 
 
@@ -164,7 +164,7 @@ def whileAnalysis(token):
         if token.type == '(':
             GlobalVariables.while_state += 1
         else:
-            print('ERROR: Esperaba un (')
+            print('Error en la línea', token.lineno, ':  Esperaba un (')
             sys.exit(2)
 
     # State 1: received first variable in the logical operation
@@ -172,7 +172,7 @@ def whileAnalysis(token):
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID existe! :",
+                print('ID existe! :',
                       GlobalVariables.symbol_table[token.value])
                 GlobalVariables.var1_type = GlobalVariables.symbol_table[token.value]['type']
                 GlobalVariables.var1_value = GlobalVariables.symbol_table[token.value]['value']
@@ -181,11 +181,11 @@ def whileAnalysis(token):
                 # print('\nGV.WV',GlobalVariables.while_vars,'\n')
                 GlobalVariables.while_state += 1
             else:
-                print("Error en la línea", token.lineno, ":  Variable ",
+                print('Error en la línea', token.lineno, ':  Variable ',
                       token.value, ' no está definida.')
                 sys.exit(2)
         else:
-            print("ERROR: Esperaba el nombre de una variable.")
+            print('Error en la línea', token.lineno, ': Esperaba el nombre de una variable.')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 2:
@@ -195,8 +195,8 @@ def whileAnalysis(token):
         elif token.type == ')':
             GlobalVariables.while_state = 5
         else:
-            print("Error en la línea", token.lineno,
-                  ": Error de sintáxis", token.value)
+            print('Error en la línea', token.lineno,
+                  ': Error de sintáxis', token.value)
             sys.exit(2)
 
     elif GlobalVariables.while_state == 3:
@@ -204,7 +204,7 @@ def whileAnalysis(token):
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! :",
+                print('ID exists! :',
                       GlobalVariables.symbol_table[token.value])
                 if GlobalVariables.checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.var1_type):
                     GlobalVariables.var2_type = GlobalVariables.symbol_table[token.value]['type']
@@ -215,13 +215,13 @@ def whileAnalysis(token):
                     print('\nToken values are', GlobalVariables.while_logical_op,
                           'and the operation is', GlobalVariables.comparacion)
                 else:
-                    print("ERROR: Variables no son del mismo tipo.")
+                    print('Error en la línea', token.lineno, ':  Variables no son del mismo tipo.')
             else:
-                print("Error en la línea", token.lineno, ": La variable ",
+                print('Error en la línea', token.lineno, ': La variable ',
                       token.value, ' no está definida.')
                 sys.exit(2)
         else:
-            print("ERROR: Esperaba el nombre de una variable.")
+            print('Error en la línea', token.lineno, ':  Esperaba el nombre de una variable.')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 4:
@@ -236,14 +236,14 @@ def whileAnalysis(token):
                 GlobalVariables.conditional_op_flag = False
                 GlobalVariables.while_state = 8
         else:
-            print("ERROR: Esperaba un )")
+            print('Error en la línea', token.lineno, ':  Esperaba un )')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 5:
         if token.type == '{':
             GlobalVariables.while_state += 1
         else:
-            print('ERROR: Esperaba un {')
+            print('Error en la línea', token.lineno, ':  Esperaba un {')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 6:
@@ -267,7 +267,7 @@ def whileAnalysis(token):
         if token.type == ';':
             resetIfFlags()
         else:
-            print('ERROR: Falta ;')
+            print('Error en la línea', token.lineno, ':  Falta ;')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 8:
@@ -276,7 +276,7 @@ def whileAnalysis(token):
         elif token.type != '}' and GlobalVariables.conditional_op_flag == False:
             print('AVISO: Ignorando el contenido del while.')
         else:
-            print('ERROR: esperaba un }')
+            print('Error en la línea', token.lineno, ':  esperaba un }')
             sys.exit(2)
 
 # Program INIT

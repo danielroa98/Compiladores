@@ -49,7 +49,7 @@ def pokemon_struct(token):
                 GlobalVariables.struct_state += 1
 
         else:
-            print('Syntax error')
+            print('Error en la línea', token.lineno, ': Syntax error')
             sys.exit(2)
 
     # Esperamos un {

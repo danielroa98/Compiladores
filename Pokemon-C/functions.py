@@ -45,7 +45,7 @@ def pokefunction(token):
                 GlobalVariables.state += 1
 
         else:
-            print('Error de sintáxis')
+            print('Error en la línea', token.lineno, ':  sintáxis')
             sys.exit(2)
 
     # Ya tenemos el tipo de print, ahora esperamos un '('
@@ -54,7 +54,7 @@ def pokefunction(token):
         if token.type == '(':
             GlobalVariables.state += 1
         else:
-            print('Error de sintáxis: Esperaba un (')
+            print('Error en la línea', token.lineno, ': sintáxis: Esperaba un (')
             sys.exit(2)
 
     # LOOP WARNING: Expecting VAR_TYPE or )
@@ -68,7 +68,7 @@ def pokefunction(token):
         elif token.type == ')':
             GlobalVariables.state = 6
         else:
-            print('Error de sintáxis: Esperaba un ) o un VAR_TYPE')
+            print('Error en la línea', token.lineno, ': sintáxis: Esperaba un ) o un VAR_TYPE')
             sys.exit(2)
     
     # LOOP WARNING: Expecting an ID
@@ -83,7 +83,7 @@ def pokefunction(token):
                 GlobalVariables.state += 1
 
         else:
-            print('Error de sintáxis')
+            print('Error en la línea', token.lineno, ': sintáxis')
             sys.exit(2)
 
     # LOOP WARNING: , or )
@@ -94,14 +94,14 @@ def pokefunction(token):
         elif token.type == ')':
             GlobalVariables.state = 5
         else:
-            print('Error de sintáxis: Esperaba un ) o un VAR_TYPE')
+            print('Error en la línea', token.lineno, ': sintáxis: Esperaba un ) o un VAR_TYPE')
             sys.exit(2)
 
     elif GlobalVariables.state == 5:
         if token.type == '{':
             GlobalVariables.state = 6
         else:
-            print("ERROR: Esperaba un ;")
+            print('Error en la línea', token.lineno, ':  Esperaba un ;')
 
     elif GlobalVariables.state == 6:
         if token.type == '}':
@@ -121,4 +121,4 @@ def pokefunction(token):
             resetFlags()
 
         else:
-            print("ERROR: Esperaba un ;")
+            print('Error en la línea', token.lineno, ': Esperaba un ;')
