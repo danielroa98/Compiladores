@@ -115,7 +115,7 @@ def checkIfVariableIsDefined(token):
     if token.value in symbol_table.keys():
         return True
     else:
-        print("Error in line",token.lineno,":  Variable ",token.value,' is not defined.')
+        print("Error en la línea",token.lineno,":  La variable ",token.value,' no está definida.')
         sys.exit(2)
 
 def logicalOperations(var1, var2, operator):
@@ -144,7 +144,6 @@ def logicalOperations(var1, var2, operator):
 
     NE -> !=
     """
-    # print(operator)
     if operator == 'EQ':
         if var1 == var2:
             return True

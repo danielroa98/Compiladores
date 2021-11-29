@@ -91,10 +91,7 @@ def programInit(token):
             #print('No function_run detected.')
             print('')
         else:
-            #structure.define_struct(token)
             runFunction.run_function(token)
-            #print('yay')
-
 
         if token.type == 'FINISH':
             programEnd(token)
@@ -102,28 +99,21 @@ def programInit(token):
         printErr(token, 1)
 
 def checkLoop(token):
-    # print("\nWhile flag Status: ", GlobalVariables.while_loop_flag,"If flag status: ", GlobalVariables.if_flag, '\n')
     if GlobalVariables.if_flag == True or GlobalVariables.while_loop_flag == True:
         if GlobalVariables.if_flag == True:
             loopAndConditionalAnalysis.checkIfandElse(token)
-            # print('Sending to loopAndConditionalAnalysis file (IF/ELSE)')
         elif GlobalVariables.while_loop_flag == True:
-            # print('Sending to loopAndConditionalAnalysis file (WHILE)')
-            # print('Sending token', token, 'to WHILE')
             loopAndConditionalAnalysis.whileAnalysis(token)
     else:
         if token.type == 'IF':
-            print('Checking IF statement')
             GlobalVariables.if_flag = True
-            # print(GlobalVariables.if_flag, 'current value')
         elif token.type == 'WHILE':
-            print('Checking WHILE loop')
             GlobalVariables.while_loop_flag = True
             # print(GlobalVariables.while_loop_flag, 'current value')
 
 def programEnd(token):
     
-    print('Ending execution')
+    print('Concluyendo ejecución')
     #if 'FINISH' in token:
     if token.type == 'FINISH':
         if GlobalVariables.end_flag == True:

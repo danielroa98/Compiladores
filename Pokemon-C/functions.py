@@ -1,8 +1,6 @@
 import sys
 import GlobalVariables
 
-
-
 '''
 Grammar
 
@@ -11,7 +9,6 @@ FUNC -> ID -> ( -> VAR_TYPE -> ID -> , ...
                                             -> } -> ;
 
 '''
-
 
 def resetFlags():
     GlobalVariables.state = 0
@@ -31,7 +28,7 @@ def define_function(token):
         if token.type == 'FUNC':
             GlobalVariables.declare_function_flag= True 
         else:
-            print("pokefunction: pass")
+            print("PokeFuncion: pass")
 
 def pokefunction(token):
     
@@ -41,14 +38,14 @@ def pokefunction(token):
         if token.type == 'ID':
             # Validar que no exista el ID
             if token.value in GlobalVariables.symbol_table.keys():
-                print("Error in line",token.lineno,":  Variable ",token.value,' is already defined.')
+                print("Error en la línea",token.lineno,":  La variable ",token.value,' ya fue definida.')
                 sys.exit(2)
             else:
                 GlobalVariables.current_variable_ID = token.value
                 GlobalVariables.state += 1
 
         else:
-            print('Syntax error')
+            print('Error de sintáxis')
             sys.exit(2)
 
     # Ya tenemos el tipo de print, ahora esperamos un '('
@@ -57,7 +54,7 @@ def pokefunction(token):
         if token.type == '(':
             GlobalVariables.state += 1
         else:
-            print('Syntax error: Expected a (')
+            print('Error de sintáxis: Esperaba un (')
             sys.exit(2)
 
     # LOOP WARNING: Expecting VAR_TYPE or )
@@ -71,7 +68,7 @@ def pokefunction(token):
         elif token.type == ')':
             GlobalVariables.state = 6
         else:
-            print('Syntax error: Expected a ) or VAR_TYPE')
+            print('Error de sintáxis: Esperaba un ) o un VAR_TYPE')
             sys.exit(2)
     
     # LOOP WARNING: Expecting an ID
@@ -86,7 +83,7 @@ def pokefunction(token):
                 GlobalVariables.state += 1
 
         else:
-            print('Syntax error')
+            print('Error de sintáxis')
             sys.exit(2)
 
     # LOOP WARNING: , or )
@@ -97,14 +94,14 @@ def pokefunction(token):
         elif token.type == ')':
             GlobalVariables.state = 5
         else:
-            print('Syntax error: Expected a ) or VAR_TYPE')
+            print('Error de sintáxis: Esperaba un ) o un VAR_TYPE')
             sys.exit(2)
 
     elif GlobalVariables.state == 5:
         if token.type == '{':
             GlobalVariables.state = 6
         else:
-            print("ERROR: Expecting ;")
+            print("ERROR: Esperaba un ;")
 
     elif GlobalVariables.state == 6:
         if token.type == '}':
@@ -120,26 +117,8 @@ def pokefunction(token):
                 'args': GlobalVariables.function_args,
                 'tokens': GlobalVariables.function_tokens
             }
-            print('Finished! ',GlobalVariables.current_variable_ID, GlobalVariables.symbol_table[GlobalVariables.current_variable_ID])
+            print('Terminé! ',GlobalVariables.current_variable_ID, GlobalVariables.symbol_table[GlobalVariables.current_variable_ID])
             resetFlags()
 
         else:
-            print("ERROR: Expecting ;")
-
-    '''
-    # Finish with ;
-    elif GlobalVariables.state == 5:
-        if token.type == ';':
-            # Guardar fucion
-            GlobalVariables.symbol_table[GlobalVariables.current_variable_ID] = {
-                'type': GlobalVariables.type_flag,
-                'args': GlobalVariables.function_args
-            }
-            print('Finished! function', GlobalVariables.symbol_table[GlobalVariables.current_variable_ID])
-            resetFlags()
-            print('finish?')
-            
-
-        else:
-            print("ERROR: Expecting ;")
-    '''
+            print("ERROR: Esperaba un ;")

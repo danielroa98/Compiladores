@@ -36,15 +36,15 @@ def modify_existing_variable(token):
                 GlobalVariables.current_variable_value = token.value
                 GlobalVariables.variable_state += 1
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error en la línea', token.lineno, ':  La variable de tipo',
+                      GlobalVariables.type_flag, 'no soporta:', token.value)
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
+                print("ID existe! : ",
                       GlobalVariables.symbol_table[token.value])
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
@@ -53,12 +53,12 @@ def modify_existing_variable(token):
                         token.value]['value']
                     GlobalVariables.variable_state += 1
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error en la línea', token.lineno, ': La variable de tipo', GlobalVariables.type_flag,
+                          'no soporta el valor:', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line", token.lineno, ":  Variable ",
-                      token.value, ' is not defined. 1')
+                print("Error en la línea", token.lineno, ":  La variable",
+                      token.value, ' no está definida.')
                 sys.exit(2)
 
     elif GlobalVariables.variable_state == 2:
@@ -66,7 +66,7 @@ def modify_existing_variable(token):
         if token.type == 'PLUS' or token.type == 'MINUS' or token.type == 'TIMES' or token.type == 'DIVIDE' or token.type == 'MOD':
             # Si tenemos BOOL o CHAR, tirar error porque no hace sentido hacer operaciones
             if GlobalVariables.type_flag == 'BOOL_TYPE' or GlobalVariables.type_flag == 'CHAR_TYPE':
-                print("Error in line", token.lineno,
+                print("Error en la línea", token.lineno,
                       ":  No se pueden hacer operaciones aritmeticas en variables tipo ", GlobalVariables.type_flag)
             # Estamos trabajando con un valor numerico, guardamos que tipo de operacion es.
             else:
@@ -74,7 +74,7 @@ def modify_existing_variable(token):
                 GlobalVariables.variable_state += 1
         else:
             if token.type != ';':
-                print("Error in line", token.lineno, ": Syntax error")
+                print("Error en la línea", token.lineno, ": error de sintáxis.")
                 sys.exit(2)
 
     # Ya tenemos la operacion, ahora el valor
@@ -88,15 +88,15 @@ def modify_existing_variable(token):
                     GlobalVariables.current_variable_value, token.value, GlobalVariables.current_operator)
                 GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error en la línea', token.lineno, ':  Variable del tipo',
+                      GlobalVariables.type_flag, 'no soporta: ', token.value)
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
+                print("ID existe! : ",
                       GlobalVariables.symbol_table[token.value])
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
@@ -105,22 +105,22 @@ def modify_existing_variable(token):
                         GlobalVariables.current_variable_value, GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.current_operator)
                     GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error en la línea', token.lineno, ': Variable de tipo', GlobalVariables.type_flag,
+                          'no soporta: ', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line", token.lineno, ":  Variable ",
-                      token.value, ' is not defined. 2')
+                print("Error en la línea", token.lineno, ":  Variable ",
+                      token.value, ' no está definida.')
                 sys.exit(2)
 
 
 def variables(token):
-    print('Token recieved in variables', token)
+    # print('Token recieved in variables', token)
     # If we know we are assigning a variable:
     if token.type == ';':
         if GlobalVariables.assign_variable_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_new_variable_flag == True or GlobalVariables.if_modify_variable_flag == True or GlobalVariables.if_array_flag == True:
             assign_variable(token)
-            print('Finished!', GlobalVariables.current_variable_ID,
+            print('Terminado!', GlobalVariables.current_variable_ID,
                   GlobalVariables.type_flag, GlobalVariables.current_variable_value)
             #var = Variable(GlobalVariables.current_variable_ID, GlobalVariables.type_flag, GlobalVariables.current_variable_value)
             GlobalVariables.symbol_table[GlobalVariables.current_variable_ID] = {
@@ -132,7 +132,7 @@ def variables(token):
             resetFlags()
 
     if GlobalVariables.assign_variable_flag == True or GlobalVariables.if_new_variable_flag == True:
-        print('Sending token to assign variable')
+        # print('Sending token to assign variable')
         assign_variable(token)
 
     elif GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_modify_variable_flag == True:
@@ -152,7 +152,7 @@ def variables(token):
                 GlobalVariables.type_flag = token.type
                 GlobalVariables.assign_variable_flag = True
 
-        # Ah fuck me es un arreglo
+        # Oh no! Es un arreglo
         elif token.type == 'ARR':
 
             if GlobalVariables.if_flag == True:
@@ -169,7 +169,7 @@ def variables(token):
                 # Variable exists! yay Lets check if its a function
 
                 if GlobalVariables.symbol_table[token.value]['type'] == 'FUNC':
-                    print('Im a function!!!')
+                    print('Función encontrada.')
 
                 else:
 
@@ -190,64 +190,41 @@ def variables(token):
                             token.value]['value']
 
         else:
-            print('pass')
-
-
-def checkLoop(token):
-    # print("\nWhile flag Status: ", GlobalVariables.while_loop_flag,"If flag status: ", GlobalVariables.if_flag, '\n')
-    if GlobalVariables.if_flag == True or GlobalVariables.while_loop_flag == True:
-        if GlobalVariables.if_flag == True:
-            loopAndConditionalAnalysis.checkConditional(token)
-            # print('Sending to loopAndConditionalAnalysis file (IF/ELSE)')
-        elif GlobalVariables.while_loop_flag == True:
-            # print('Sending to loopAndConditionalAnalysis file (WHILE)')
-            # print('Sending token', token, 'to WHILE')
-            loopAndConditionalAnalysis.whileAnalysis(token)
-    else:
-        if token.type == 'IF':
-            print('Checking IF statement')
-            GlobalVariables.if_flag = True
-            # print(GlobalVariables.if_flag, 'current value')
-        elif token.type == 'WHILE':
-            print('Checking WHILE loop')
-            GlobalVariables.while_loop_flag = True
-            # print(GlobalVariables.while_loop_flag, 'current value')
-
+            # print('pass')
+            print('')
 
 def checkIfVariableIsDefined(token):
     if token.value in GlobalVariables.symbol_table.keys():
         return True
     else:
-        print("Error in line", token.lineno, ":  Variable ",
-              token.value, ' is not defined. 3')
+        print("Error en la línea", token.lineno, ": La variable ",
+              token.value, ' no está definida.')
         sys.exit(2)
-
 
 def checkIfVariableIsNOTDefined(token):
     if token.value in GlobalVariables.symbol_table.keys():
-        print("Error in line", token.lineno, ":  Variable ",
-              token.value, ' is not defined. 3')
+        print("Error en la línea", token.lineno, ": La variable ",
+              token.value, ' no está definida.')
         sys.exit(2)
     else:
         return True
 
-
 def assign_variable(token):
-    print('state', GlobalVariables.variable_state)
+    # print('state', GlobalVariables.variable_state)
     # Guardamos ID
     if GlobalVariables.variable_state == 0:
         # Validacion
         if token.type == 'ID':
             # Validar que no exista el ID
             if token.value in GlobalVariables.symbol_table.keys():
-                print("Error in line", token.lineno, ":  Variable ",
-                      token.value, ' is already defined.')
+                print("Error en la línea", token.lineno, ": La variable ",
+                      token.value, ' ya está definida.')
                 sys.exit(2)
             else:
                 GlobalVariables.current_variable_ID = token.value
                 GlobalVariables.variable_state += 1
         else:
-            print('Syntax error')
+            print('Error de sintáxis.')
             sys.exit(2)
 
     # Confirmar asignacion
@@ -256,7 +233,7 @@ def assign_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.variable_state += 1
         else:
-            print('Syntax error')
+            print('Error de sintáxis.')
             sys.exit(2)
 
     # Esperar ID o un valor
@@ -269,15 +246,15 @@ def assign_variable(token):
                 GlobalVariables.current_variable_value = token.value
                 GlobalVariables.variable_state += 1
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error en la línea', token.lineno, ': La variable del tipo',
+                      GlobalVariables.type_flag, 'no soporta el valor:', token.value)
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
+                print("ID existe! :",
                       GlobalVariables.symbol_table[token.value])
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
@@ -286,12 +263,12 @@ def assign_variable(token):
                         token.value]['value']
                     GlobalVariables.variable_state += 1
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error en la línea', token.lineno, ': Variable del tipo', GlobalVariables.type_flag,
+                          'no soporta el valor: ', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line", token.lineno, ":  Variable ",
-                      token.value, ' is not defined. 4')
+                print("Error en la línea", token.lineno, ": La variable",
+                      token.value, ' no está definida.')
                 sys.exit(2)
 
     elif GlobalVariables.variable_state == 3:
@@ -299,15 +276,15 @@ def assign_variable(token):
         if token.type == 'PLUS' or token.type == 'MINUS' or token.type == 'TIMES' or token.type == 'DIVIDE' or token.type == 'MOD':
             # Si tenemos BOOL o CHAR, tirar error porque no hace sentido hacer operaciones
             if GlobalVariables.type_flag == 'BOOL_TYPE' or GlobalVariables.type_flag == 'CHAR_TYPE':
-                print("Error in line", token.lineno,
-                      ":  No se pueden hacer operaciones aritmeticas en variables tipo ", GlobalVariables.type_flag)
+                print("Error en la línea", token.lineno,
+                      ": No se pueden hacer operaciones aritmeticas en variables tipo", GlobalVariables.type_flag)
             # Estamos trabajando con un valor numerico, guardamos que tipo de operacion es.
             else:
                 GlobalVariables.current_operator = token.type
                 GlobalVariables.variable_state += 1
         else:
             if token.type != ';':
-                print("Error in line", token.lineno, ": Syntax error")
+                print("Error en la línea", token.lineno, ": error de sintáxis.")
                 sys.exit(2)
 
     # Ya tenemos la operacion, ahora el valor
@@ -321,15 +298,15 @@ def assign_variable(token):
                     GlobalVariables.current_variable_value, token.value, GlobalVariables.current_operator)
                 GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error en la línea', token.lineno, ': La variable de tipo',
+                      GlobalVariables.type_flag, 'no soporta el valor:', token.value)
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
+                print("ID existe! : ",
                       GlobalVariables.symbol_table[token.value])
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
@@ -338,12 +315,12 @@ def assign_variable(token):
                         GlobalVariables.current_variable_value, GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.current_operator)
                     GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error en la línea', token.lineno, ': La variable de tipo', GlobalVariables.type_flag,
+                          'no soporta el valor:', GlobalVariables.symbol_table[token.value]['value'])
                     sys.exit(2)
             else:
-                print("Error in line", token.lineno, ":  Variable ",
-                      token.value, ' is not defined. 5')
+                print("Error en la línea", token.lineno, ": La variable ",
+                      token.value, ' no está definida.')
                 sys.exit(2)
 
 
