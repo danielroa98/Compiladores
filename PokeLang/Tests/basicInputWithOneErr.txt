@@ -1,8 +1,25 @@
 battle_start;
-pikachu x = 100;
-pokebelt z = [1, 2, 3];
-pokebelt a = [];
-pikachu y = 10 + x;
-x = 1000;
-y = x + p;
+pokebelt p = [];
+
+pikachu x = 1;
+pikachu end = 10;
+move func(){
+    x = 10 + 20;
+    pokehabla(x);
+};
+
+if_i_choose_you(x > end){
+    pikachu x = 10;
+    pokehabla(x);
+} else {
+    pokehabla(end)
+};
+
+
+func();
+
+whilepokemon(x < end){
+    x = x + 1;
+};
+
 battle_end;

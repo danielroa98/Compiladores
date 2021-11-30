@@ -122,11 +122,11 @@ def checkLoop(token):
             loopAndConditionalAnalysis.whileAnalysis(token)
     else:
         if token.type == 'IF':
-            print('Checking IF statement')
+            #print('Checking IF statement')
             GlobalVariables.if_flag = True
             # print(GlobalVariables.if_flag, 'current value')
         elif token.type == 'WHILE':
-            print('Checking WHILE loop')
+            #print('Checking WHILE loop')
             GlobalVariables.while_loop_flag = True
             # print(GlobalVariables.while_loop_flag, 'current value')
 

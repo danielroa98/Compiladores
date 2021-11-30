@@ -56,13 +56,13 @@ def resetWhileFlags():
 
 
 def checkIfandElse(token):
-    print('Checking IF')
+    #print('Checking IF')
     # State case 0: waiting for '('
     if GlobalVariables.if_state_flag == 0:
         if token.type == '(':
             GlobalVariables.if_state_flag += 1
         else:
-            print('ERROR: esperaba un (')
+            print('Error in line', token.lineno, ': esperaba un (')
             sys.exit(2)
 
     # State case 1: waiting for the first variable to analyze
@@ -81,12 +81,12 @@ def checkIfandElse(token):
                       token.value, ' is not defined.')
                 sys.exit(2)
         else:
-            print('ERROR: esperaba un valor o una variable.')
+            print('Error in line', token.lineno, ': esperaba un valor o una variable.')
             sys.exit(2)
 
     # State case 2: awaiting the logical operation in the if.
     elif GlobalVariables.if_state_flag == 2:
-        print('Second state\n')
+
         if token.type == 'EQ' or token.type == 'LE' or token.type == 'GE' or token.type == 'GT' or token.type == 'LT' or token.type == 'NE':
             GlobalVariables.comparacion = token.type
             GlobalVariables.if_state_flag += 1
@@ -100,21 +100,19 @@ def checkIfandElse(token):
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("IF ID exists! : ",
-                      GlobalVariables.symbol_table[token.value])
                 if GlobalVariables.checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.var1_type):
                     GlobalVariables.var2_type = GlobalVariables.symbol_table[token.value]['type']
                     GlobalVariables.var2_value = GlobalVariables.symbol_table[token.value]['value']
                     GlobalVariables.if_state_flag += 1
                 else:
-                    print("ERROR: Las variables no son del mismo tipo")
+                    print('Error in line', token.lineno, ': Las variables no son del mismo tipo')
                     sys.exit(2)
             else:
                 print("Error in line", token.lineno, ":  Variable ",
                       token.value, ' is not defined.')
                 sys.exit(2)
         else:
-            print("ERROR: Esperaba un valor/variable en el segundo lugar")
+            print('Error in line', token.lineno, ': Esperaba un valor/variable en el segundo lugar')
             sys.exit(2)
 
     # State case 4: awaiting the second parenthesis in order to validate the logical operation
@@ -124,24 +122,24 @@ def checkIfandElse(token):
 
             if GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
                 # print('Si cumple\nState 4')
-                print('\nLogical operation is true')
+                #print('\nLogical operation is true')
                 GlobalVariables.if_state_flag += 1
                 GlobalVariables.conditional_op_flag = True
             else:
-                print('\nLogical operation is false')
-                print('Checking the existance of an ELSE')
+                #print('\nLogical operation is false')
+                #print('Checking the existance of an ELSE')
                 GlobalVariables.if_state_flag = 7
         else:
-            print("ERROR: Esperaba un )")
+            print('Error in line', token.lineno, ': Esperaba un )')
             sys.exit(2)
 
     # State case 5: awaits the openning bracket in order to start reading the contents of the IF.
     elif GlobalVariables.if_state_flag == 5:
-        print('\nIn state 5', token)
+        #print('\nIn state 5', token)
         if token.type == '{':
             GlobalVariables.if_state_flag += 1
         else:
-            print('ERROR: esperaba un {')
+            print('Error in line', token.lineno, ': esperaba un {')
             sys.exit(2)
 
     # State case 6: starts reading the operations inside the if cycle while it awaits a closing bracket
@@ -150,7 +148,7 @@ def checkIfandElse(token):
         if token.type == '}':
             GlobalVariables.if_state_flag = 8
         else:
-            print('Reading variables')
+            #print('Reading variables')
             program_init(token)
 
     # State case 7: awaits the closing bracket corresponding to the IF statement
@@ -158,28 +156,27 @@ def checkIfandElse(token):
         if token.type == '}':
             GlobalVariables.if_state_flag += 1
         elif token.type != '}' and GlobalVariables.conditional_op_flag == False:
-            print('Ignoring content')
+            print('')
         else:
-            print('ERROR: esperaba un }')
+            print('Error in line', token.lineno, ': esperaba un }')
             sys.exit(2)
 
     # State case 8: awaiting the declaration of the else or the ;
     elif GlobalVariables.if_state_flag == 8:
         if token.type == 'ELSE' and GlobalVariables.conditional_op_flag == False:
-            print('Detected an else')
             GlobalVariables.if_state_flag = 5
         elif GlobalVariables.conditional_op_flag == True:
-            print('Ignoring ELSE')
+            #print('Ignoring ELSE')
             if token.type == ';':
-                print('Closing statement')
+             #   print('Closing statement')
                 resetIfFlags()
-                print('Resetted flags')
+              #  print('Resetted flags')
         elif token.type == ';' and GlobalVariables.conditional_op_flag == False:
-            print('If was false\nNo else detected')
+            #print('If was false\nNo else detected')
             resetIfFlags()
-            print('Resetted flags')
+            #print('Resetted flags')
         else:
-            print('ERROR: no hay seguimiento en la operación. (Falta un ELSE o un ;)')
+            print('Error in line', token.lineno, ': no hay seguimiento en la operación. (Falta un ELSE o un ;)')
             sys.exit(2)
 
 
@@ -191,17 +188,17 @@ def whileAnalysis(token):
         if token.type == '(':
             GlobalVariables.while_state += 1
         else:
-            print('ERROR: Esperaba un (')
+            print('Error in line', token.lineno, ': Esperaba un (')
             sys.exit(2)
 
     # State 1: received first variable in the logical operation
     elif GlobalVariables.while_state == 1:
-        print('State 1 received', token)
+        #print('State 1 received', token)
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! :",
-                      GlobalVariables.symbol_table[token.value])
+                #print("ID exists! :",
+                 #     GlobalVariables.symbol_table[token.value])
                 GlobalVariables.var1_type = GlobalVariables.symbol_table[token.value]['type']
                 GlobalVariables.var1_value = GlobalVariables.symbol_table[token.value]['value']
 
@@ -213,7 +210,7 @@ def whileAnalysis(token):
                       token.value, ' no está definida.')
                 sys.exit(2)
         else:
-            print("ERROR: Esperaba un valor/variable primer lugar")
+            print('Error in line', token.lineno, ': Esperaba un valor/variable primer lugar')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 2:
@@ -229,28 +226,28 @@ def whileAnalysis(token):
 
     elif GlobalVariables.while_state == 3:
         # A ver, que variable / valor estamos esperando ?
-        print('State 3 received', token)
+        #print('State 3 received', token)
         if token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! :",
-                      GlobalVariables.symbol_table[token.value])
+                #print("ID exists! :",
+                #      GlobalVariables.symbol_table[token.value])
                 if GlobalVariables.checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.var1_type):
                     GlobalVariables.var2_type = GlobalVariables.symbol_table[token.value]['type']
                     GlobalVariables.var2_value = GlobalVariables.symbol_table[token.value]['value']
 
                     GlobalVariables.while_logical_op.append(token.value)
                     GlobalVariables.while_state += 1
-                    print('\nToken values are', GlobalVariables.while_logical_op,
-                          'and the operation is', GlobalVariables.comparacion)
+                #    print('\nToken values are', GlobalVariables.while_logical_op,
+                #          'and the operation is', GlobalVariables.comparacion)
                 else:
-                    print("ERROR: No son del mismo tipo")
+                    print('Error in line', token.lineno, ': No son del mismo tipo')
             else:
                 print("Error in line", token.lineno, ":  Variable ",
                       token.value, ' is not defined.')
                 sys.exit(2)
         else:
-            print("ERROR: Esperaba un valor/variable segundo lugar")
+            print('Error in line', token.lineno, ': Esperaba un valor/variable segundo lugar')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 4:
@@ -259,24 +256,24 @@ def whileAnalysis(token):
 
             if GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
                 GlobalVariables.conditional_op_flag = True
-                print('\nLogical operation is true')
+                #print('\nLogical operation is true')
                 GlobalVariables.while_state += 1
 
             else:
-                print('\nLogical operation is false')
-                print('Exiting while')
+                #print('\nLogical operation is false')
+                #print('Exiting while')
                 GlobalVariables.conditional_op_flag = False
                 GlobalVariables.while_state = 8
         else:
-            print("ERROR: Esperaba un )")
+            print('Error in line', token.lineno, ': Esperaba un )')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 5:
         if token.type == '{':
-            print('Started to read the operations inside the WHILE')
+            #print('Started to read the operations inside the WHILE')
             GlobalVariables.while_state += 1
         else:
-            print('ERROR: Esperaba un {')
+            print('Error in line', token.lineno, ': Esperaba un {')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 6:
@@ -286,17 +283,17 @@ def whileAnalysis(token):
 
 
             while GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
-                print('Current values are:', GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion), 'X=', GlobalVariables.var1_value, 'Y=',GlobalVariables.var2_value)
+                #print('Current values are:', GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion), 'X=', GlobalVariables.var1_value, 'Y=',GlobalVariables.var2_value)
                 for x in GlobalVariables.token_list:
                     #Flag = true; si la flag es true ignorar while, no puedes entrar, porque estas ejecutando
                     program_init(x)
-                    print('Inside for iteration')
+                    #print('Inside for iteration')
                 
             
                 GlobalVariables.var1_value = GlobalVariables.symbol_table[GlobalVariables.while_logical_op[0]]['value']
                 GlobalVariables.var2_value = GlobalVariables.symbol_table[GlobalVariables.while_logical_op[1]]['value']
 
-                print('Finished for iteration')
+                #print('Finished for iteration')
                 # GlobalVariables.while_state += 1
 
             GlobalVariables.while_state+=1
@@ -305,36 +302,36 @@ def whileAnalysis(token):
 
     elif GlobalVariables.while_state == 7:
         if token.type == ';':
-            print('Done processing while')
+            #print('Done processing while')
             resetIfFlags()
         else:
-            print('ERROR: missing ;')
+            print('Error in line', token.lineno, ': missing ;')
             sys.exit(2)
 
     elif GlobalVariables.while_state == 8:
         if token.type == '}':
             GlobalVariables.while_state = 7
         elif token.type != '}' and GlobalVariables.conditional_op_flag == False:
-            print('Ignoring content')
+            print('')
         else:
-            print('ERROR: esperaba un }')
+            print('Error in line', token.lineno, ': esperaba un }')
             sys.exit(2)
 
 # Program INIT
 def program_init(token):
 
-    print('Banderita de mi IF PRINT FLAG', GlobalVariables.if_print_flag)
+    #print('Banderita de mi IF PRINT FLAG', GlobalVariables.if_print_flag)
 
     if GlobalVariables.if_new_variable_flag == True or GlobalVariables.if_modify_variable_flag == True or GlobalVariables.if_array_flag == True:
         print('')
     else:
-        print('Voy a entrar a mi print')
+        #print('Voy a entrar a mi print')
         prints.what_print(token)
-        print('Sali de mi print')
+        #print('Sali de mi print')
 
     if GlobalVariables.if_print_flag == True or GlobalVariables.if_print_new_line_flag == True:
         print('')
     else:
-        print('Voy a entrar a mi variablie')
+        #print('Voy a entrar a mi variablie')
         variables_doc.variables(token)
-        print('Sali de mi variablie')
+        #print('Sali de mi variablie')

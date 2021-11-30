@@ -42,7 +42,7 @@ def define_struct(token):
         if token.type == 'STRUCT':
             GlobalVariables.declare_struct_flag = True 
         else:
-            print("pokestruct: pass")
+            print("")
 
 def pokemon_struct(token):
     # Obtenemos el ID de la estuctura
@@ -58,7 +58,7 @@ def pokemon_struct(token):
                 GlobalVariables.struct_state += 1
 
         else:
-            print('Syntax error')
+            print('Error in line', token.lineno, ': Syntax error')
             sys.exit(2)
 
     # Esperamos un {

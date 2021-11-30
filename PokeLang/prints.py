@@ -46,7 +46,7 @@ def what_print(token):
                 GlobalVariables.type_flag = token.type
                 GlobalVariables.print_in_newline_flag = True
         else:
-            print("pokeprint: pass")
+            print("")
 
 
 # Funcion
@@ -57,7 +57,7 @@ def pokeprint(token):
         if token.type == '(':
             GlobalVariables.state += 1
         else:
-            print('Syntax error: Expected a (')
+            print('Error in line', token.lineno, ': Expected a (')
             sys.exit(2)
 
     # Ahora esperamos una variable para imprimir
@@ -72,7 +72,7 @@ def pokeprint(token):
                 GlobalVariables.state += 1
 
         else:
-            print("ERROR: Expected a variable")
+            print('Error in line', token.lineno, ': Expected a variable')
             sys.exit(2)
     
     # Ahora esperamos un ')'
@@ -81,12 +81,12 @@ def pokeprint(token):
         if token.type == ')':
             GlobalVariables.state += 1
         else:
-            print('Syntax error: Expected a )')
+            print('Error in line', token.lineno, ': Expected a )')
             sys.exit(2)
     
     # Ahora esperamos un ';'
     elif GlobalVariables.state == 3:
-        print('Checking for ;')
+        #print('Checking for ;')
         # Validacion
         if token.type == ';':
             # Yay!
@@ -99,7 +99,7 @@ def pokeprint(token):
                 resetFlags()
 
         else:
-            print('Syntax error: Expected a ;')
+            print('Error in line', token.lineno, ': Expected a ;')
             sys.exit(2)
 
 

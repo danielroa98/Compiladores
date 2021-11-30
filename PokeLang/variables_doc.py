@@ -33,7 +33,7 @@ def modify_existing_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.variable_state += 1
         else:
-            print('Syntax error, MEV')
+            print('Error in line', token.lineno, ': Syntax error')
             sys.exit(2)
 
     # Esperar ID o un valor
@@ -46,16 +46,14 @@ def modify_existing_variable(token):
                 GlobalVariables.current_variable_value = token.value
                 GlobalVariables.variable_state += 1
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
-                      GlobalVariables.symbol_table[token.value])
+                
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
                     # 2. Asignar esa variable
@@ -63,8 +61,7 @@ def modify_existing_variable(token):
                         token.value]['value']
                     GlobalVariables.variable_state += 1
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                     sys.exit(2)
             else:
                 print("Error in line", token.lineno, ":  Variable ",
@@ -98,16 +95,14 @@ def modify_existing_variable(token):
                     GlobalVariables.current_variable_value, token.value, GlobalVariables.current_operator)
                 GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
-                      GlobalVariables.symbol_table[token.value])
+                
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
                     # 2. Asignar esa variable
@@ -115,8 +110,7 @@ def modify_existing_variable(token):
                         GlobalVariables.current_variable_value, GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.current_operator)
                     GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                     sys.exit(2)
             else:
                 print("Error in line", token.lineno, ":  Variable ",
@@ -125,7 +119,7 @@ def modify_existing_variable(token):
 
 
 def variables(token):
-    print('Token recieved in variables', token)
+    #print('Token recieved in variables', token)
     # If we know we are assigning a variable:
     if token.type == ';':
         if GlobalVariables.assign_variable_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_new_variable_flag == True or GlobalVariables.if_modify_variable_flag == True or GlobalVariables.if_array_flag == True:
@@ -142,7 +136,7 @@ def variables(token):
             resetFlags()
 
     if GlobalVariables.assign_variable_flag == True or GlobalVariables.if_new_variable_flag == True:
-        print('Sending token to assign variable')
+        #print('Sending token to assign variable')
         assign_variable(token)
 
     elif GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_modify_variable_flag == True:
@@ -179,7 +173,7 @@ def variables(token):
                 # Variable exists! yay Lets check if its a function
 
                 if GlobalVariables.symbol_table[token.value]['type'] == 'FUNC':
-                    print('Im a function!!!')
+                    print('')
 
                 else:
 
@@ -200,7 +194,7 @@ def variables(token):
                             token.value]['value']
 
         else:
-            print('pass')
+            print('')
 
 
 def checkLoop(token):
@@ -215,11 +209,11 @@ def checkLoop(token):
             loopAndConditionalAnalysis.whileAnalysis(token)
     else:
         if token.type == 'IF':
-            print('Checking IF statement')
+            #print('Checking IF statement')
             GlobalVariables.if_flag = True
             # print(GlobalVariables.if_flag, 'current value')
         elif token.type == 'WHILE':
-            print('Checking WHILE loop')
+            #print('Checking WHILE loop')
             GlobalVariables.while_loop_flag = True
             # print(GlobalVariables.while_loop_flag, 'current value')
 
@@ -243,7 +237,7 @@ def checkIfVariableIsNOTDefined(token):
 
 
 def assign_variable(token):
-    print('state', GlobalVariables.variable_state)
+    #print('state', GlobalVariables.variable_state)
     # Guardamos ID
     if GlobalVariables.variable_state == 0:
         # Validacion
@@ -257,7 +251,7 @@ def assign_variable(token):
                 GlobalVariables.current_variable_ID = token.value
                 GlobalVariables.variable_state += 1
         else:
-            print('Syntax error')
+            print('Error in line', token.lineno, ': Syntax error')
             sys.exit(2)
 
     # Confirmar asignacion
@@ -266,7 +260,7 @@ def assign_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.variable_state += 1
         else:
-            print('Syntax error')
+            print('Error in line', token.lineno, ': Syntax error')
             sys.exit(2)
 
     # Esperar ID o un valor
@@ -279,16 +273,14 @@ def assign_variable(token):
                 GlobalVariables.current_variable_value = token.value
                 GlobalVariables.variable_state += 1
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                 sys.exit(2)
 
         # Si nos da un ID
         elif token.type == 'ID':
             # 1. Checar si ese ID ya existe en mi tabla de simbolos
             if token.value in GlobalVariables.symbol_table.keys():
-                print("ID exists! : ",
-                      GlobalVariables.symbol_table[token.value])
+                
                 # 2. Checar si sus tipos son compatibles
                 if checkValue(GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.type_flag):
                     # 2. Asignar esa variable
@@ -296,8 +288,7 @@ def assign_variable(token):
                         token.value]['value']
                     GlobalVariables.variable_state += 1
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                     sys.exit(2)
             else:
                 print("Error in line", token.lineno, ":  Variable ",
@@ -331,8 +322,7 @@ def assign_variable(token):
                     GlobalVariables.current_variable_value, token.value, GlobalVariables.current_operator)
                 GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
             else:
-                print('Error in line', token.lineno, ':  Variable type',
-                      GlobalVariables.type_flag, 'doesnt support value: ', token.value)
+                print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                 sys.exit(2)
 
         # Si nos da un ID
@@ -348,8 +338,7 @@ def assign_variable(token):
                         GlobalVariables.current_variable_value, GlobalVariables.symbol_table[token.value]['value'], GlobalVariables.current_operator)
                     GlobalVariables.variable_state -= 1  # Regresamos a esperar otra operacion
                 else:
-                    print('Error in line', token.lineno, ': Variable type', GlobalVariables.type_flag,
-                          'doesnt support value: ', GlobalVariables.symbol_table[token.value]['value'])
+                    print('Error in line', token.lineno, ':  Los tipos no son compatibles')
                     sys.exit(2)
             else:
                 print("Error in line", token.lineno, ":  Variable ",

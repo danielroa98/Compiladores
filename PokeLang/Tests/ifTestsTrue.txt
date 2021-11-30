@@ -5,4 +5,8 @@ if_i_choose_you(x < end){
     x = x + 1;
     pokehabla(x);
 };
+
+        whilepokemon(x < end){
+        x = x + 1;
+    };
 battle_end;

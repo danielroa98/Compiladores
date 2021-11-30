@@ -31,7 +31,7 @@ def assign_array_variable(token):
                 GlobalVariables.state += 1
 
         else:
-            print('Syntax error')
+            print('Error in line', token.lineno, ': Syntax error')
             sys.exit(2)
     
     # Espero un '='
@@ -40,7 +40,7 @@ def assign_array_variable(token):
         if token.type == 'ASSIGN':
             GlobalVariables.state += 1
         else:
-            print('Syntax error: Expected =')
+            print('Error in line', token.lineno, ': Expected =')
             sys.exit(2)
     
     # Espero un '['
@@ -49,7 +49,7 @@ def assign_array_variable(token):
         if token.type == '[':
             GlobalVariables.state += 1
         else:
-            print('Syntax error: Expected [')
+            print('Error in line', token.lineno, ': Expected [')
             sys.exit(2)
 
     # Espero un valor
@@ -63,7 +63,7 @@ def assign_array_variable(token):
             GlobalVariables.state = 6
 
         else:
-            print("ERROR: Expected a value")
+            print('Error in line', token.lineno, ': Expected a value')
             sys.exit(2)
 
     # LOOP WARNING: Espero un ',' o ']'
@@ -74,7 +74,7 @@ def assign_array_variable(token):
         elif token.type == ']':
             GlobalVariables.state = 6
         else:
-            print("ERROR: Expected a ,")
+            print('Error in line', token.lineno, ':Expected a ,')
             sys.exit(2)
 
     # LOOP WARNING: Espero un valor
@@ -84,11 +84,11 @@ def assign_array_variable(token):
                 GlobalVariables.array_values.append(token.value)
                 GlobalVariables.state -= 1
             else:
-                print("ERROR: Variable is not same initial type ",GlobalVariables.type_flag)
+                print('Error in line', token.lineno, ': Variable is not same initial type ',GlobalVariables.type_flag)
                 sys.exit(2)
 
         else:
-            print("ERROR: Expected a value")
+            print('Error in line', token.lineno, ': Expected a value')
             sys.exit(2)
 
     # Terminar asignacion
@@ -104,6 +104,6 @@ def assign_array_variable(token):
             resetFlags()
 
         else:
-            print('Syntax error: Expected ASSIGN or ;')
+            print('Error in line', token.lineno, ': Expected ASSIGN or ;')
             sys.exit(2)
 
