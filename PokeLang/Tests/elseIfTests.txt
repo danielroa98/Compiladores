@@ -5,6 +5,6 @@ if_i_choose_you(x > end){
     pikachu x = 10;
     pokehabla(x);
 } else {
-    pokehabla(end)
+    pokehabla(end);
 };
 battle_end;
