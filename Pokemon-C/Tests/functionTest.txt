@@ -1,0 +1,11 @@
+battle_start;
+pikachu x = 10;
+
+move func(){
+    x = 10 + 20;
+    pokehabla(x);
+};
+
+func();
+
+battle_end;

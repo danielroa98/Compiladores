@@ -74,6 +74,11 @@ def prepare_function(token):
 
 def program_init(token):
     print(token)
+    if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
+        print('No print statement detected.')
+        print('')
+    else:
+        prints.what_print(token)
 
     if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
             print('No variable detected.')
@@ -81,11 +86,6 @@ def program_init(token):
     else:
         variables_doc.variables(token)
 
-    if GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.if_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True or GlobalVariables.while_loop_flag == True:
-        print('No print statement detected.')
-        print('')
-    else:
-        prints.what_print(token)
 
     if GlobalVariables.print_in_line_flag == True or GlobalVariables.print_in_newline_flag == True or GlobalVariables.assign_variable_flag == True or GlobalVariables.assign_array_flag == True or GlobalVariables.modify_existing_varaible_flag == True or GlobalVariables.declare_function_flag == True or GlobalVariables.declare_struct_flag == True:
         print('No if or while detected.')

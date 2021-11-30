@@ -1,0 +1,10 @@
+battle_start;
+
+pokemon Roa{
+    pikachu vida;
+    bulbasaur muerto;
+    squirtle ataque;
+    charmander tipo;
+};
+
+battle_end;

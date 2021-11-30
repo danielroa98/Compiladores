@@ -1,5 +1,6 @@
 import sys
 import GlobalVariables
+import assign_array
 
 
 def resetFlags():
