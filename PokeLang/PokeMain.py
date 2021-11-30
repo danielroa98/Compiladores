@@ -1,3 +1,12 @@
+
+'''
+Antonio Junco de Haas - A01339695
+Luis Daniel Roa González - A01021960
+Sergio Hernández Castillo - A01025210
+Sebastián Gonzalo Vives Faus - A01025211
+
+'''
+
 import getopt
 import sys
 import PokeLexer

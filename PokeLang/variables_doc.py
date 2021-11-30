@@ -1,3 +1,12 @@
+
+'''
+Antonio Junco de Haas - A01339695
+Luis Daniel Roa González - A01021960
+Sergio Hernández Castillo - A01025210
+Sebastián Gonzalo Vives Faus - A01025211
+
+'''
+
 import sys
 import GlobalVariables
 import assign_array
@@ -153,7 +162,7 @@ def variables(token):
                 GlobalVariables.type_flag = token.type
                 GlobalVariables.assign_variable_flag = True
 
-        # Ah fuck me es un arreglo
+        # yay es un arreglo, quemosion
         elif token.type == 'ARR':
 
             if GlobalVariables.if_flag == True:

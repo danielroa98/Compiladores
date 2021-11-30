@@ -1,3 +1,12 @@
+
+'''
+Antonio Junco de Haas - A01339695
+Luis Daniel Roa González - A01021960
+Sergio Hernández Castillo - A01025210
+Sebastián Gonzalo Vives Faus - A01025211
+
+'''
+
 import GlobalVariables
 import sys
 
@@ -235,7 +244,7 @@ def whileAnalysis(token):
                     print('\nToken values are', GlobalVariables.while_logical_op,
                           'and the operation is', GlobalVariables.comparacion)
                 else:
-                    print("ERROR: No son del mismo tipo, pelas")
+                    print("ERROR: No son del mismo tipo")
             else:
                 print("Error in line", token.lineno, ":  Variable ",
                       token.value, ' is not defined.')
@@ -274,7 +283,7 @@ def whileAnalysis(token):
         if token.type == '}':
 
             GlobalVariables.while_list_len = len(GlobalVariables.token_list)
-            print('FOUND THE FEET PICKS')
+
 
             while GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion):
                 print('Current values are:', GlobalVariables.logicalOperations(GlobalVariables.var1_value, GlobalVariables.var2_value, GlobalVariables.comparacion), 'X=', GlobalVariables.var1_value, 'Y=',GlobalVariables.var2_value)
@@ -289,7 +298,7 @@ def whileAnalysis(token):
 
                 print('Finished for iteration')
                 # GlobalVariables.while_state += 1
-                print('IM ALL OUT OF LOVE')
+
             GlobalVariables.while_state+=1
         else:
             GlobalVariables.token_list.append(token)
