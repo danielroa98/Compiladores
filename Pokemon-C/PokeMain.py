@@ -13,8 +13,7 @@ if __name__ == '__main__':
         for arg, value in args:
             # print(arg, value)
             if arg in ('-h', '--help'):
-                print(
-                    'Para comenzar a usar Pokemon-C, corra el siguiente comando.\npython3 PokeMain.py -i <path/al/archivo>')
+                print('Para comenzar a usar PokeLang, corra el siguiente comando.\npython3 PokeMain.py -i <path/al/archivo>')
                 sys.exit(2)
             elif arg in ('-i', '--ifile'):
                 # print('Using file located in', value, 'as the current input.')
